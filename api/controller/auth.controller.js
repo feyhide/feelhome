@@ -13,7 +13,6 @@ export const signup = async (req,res,next) => {
     } catch (error) {
        next(error)
     }
-
 }  
 
 export const signin = async (req,res,next) => {
