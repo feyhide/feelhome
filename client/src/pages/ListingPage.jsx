@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import Contact from './Contact'
 
 const ListingPage = () => {
+    const {currentUser} = useSelector(state=>state.user)
     const [listing, setListing] = useState({})
+    const [contact,setContact] = useState(false)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     
@@ -29,7 +33,6 @@ const ListingPage = () => {
         fetchListing()
     }, [params.listingID])
     console.log(listing)
-
     return (
         <div className='listing-details'>
             <h2>{listing.name}</h2>
@@ -42,6 +45,10 @@ const ListingPage = () => {
                     <img key={index} src={url} alt={`Image ${index + 1}`} />
                 ))}
             </div>
+            {currentUser && !contact && currentUser._id !== listing.userRef && (
+                <button onClick={()=>setContact(true)}>Contact Landlord</button>
+            )}
+            {contact ? (<Contact listing={listing}/>) : ''}
         </div>
     )
 }
