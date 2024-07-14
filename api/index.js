@@ -3,6 +3,8 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import userRouter from './route/user.route.js'
 import authRouter from './route/auth.route.js'
+import cookieParser from 'cookie-parser'
+
 
 dotenv.config()
 
@@ -23,6 +25,9 @@ app.listen(port,()=>{
 })
 
 app.use(express.json())
+app.use(cookieParser())
+
+
 app.use('/api/v1/user',userRouter)
 app.use('/api/v1/auth',authRouter)
 app.use((err,req,res,next)=>{
