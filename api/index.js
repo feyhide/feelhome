@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import userRouter from './route/user.route.js'
 import authRouter from './route/auth.route.js'
+import listingRouter from './route/listing.route.js'
 import cookieParser from 'cookie-parser'
 
 
@@ -30,6 +31,7 @@ app.use(cookieParser())
 
 app.use('/api/v1/user',userRouter)
 app.use('/api/v1/auth',authRouter)
+app.use('/api/v1/listing',listingRouter)
 app.use((err,req,res,next)=>{
     const statusCode = err.statusCode || 500
     const message = err.message || `INTERNAL SERVER ERROR`
