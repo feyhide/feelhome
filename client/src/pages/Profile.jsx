@@ -7,6 +7,7 @@ import {Link} from 'react-router-dom'
 const Profile = () => {
   const dispatch = useDispatch()
   const {loading,error,currentUser} = useSelector((state)=> state.user)
+  const [userlisting,setuserlisting] = useState({})
   const imageRef = useRef(null)
   const [file,setfile] = useState(undefined)
   const [filepercentage,setfilepercentage] = useState(0)
@@ -119,6 +120,20 @@ const Profile = () => {
       dispatch(signOutFailure(error.message))
     }
   }
+
+  const handleShowListing = async() => {
+    try {
+      const res = await fetch(`/api/v1/user/listings/${currentUser._id}`)
+      const data = await res.json()
+      if(data.success === false){
+        return
+      }
+      setuserlisting(data)
+      console.log(data)
+    } catch (error) {
+      
+    }
+  }
   return (
     <div>
       <h1 className='text-3xl font-semibold text-center my-6'>Profile</h1>
@@ -146,7 +161,24 @@ const Profile = () => {
         <span onClick={handleDeleteUser}>Delete Account</span>
         <span onClick={handleSignout}>Sign Out</span>
       </div>
-      <p className='mt-5 text-red-700'>{error? error : ''}</p>
+        <p className='mt-5 text-red-700'>{error? error : ''}</p>
+        <div className='w-full flex flex-col p-4 items-center justify-center'>
+          <button onClick={handleShowListing} className='mb-5 w-[50%] bg-slate-700 text-white p-3 rounded-lg uppercase'>Show Listings</button>
+          {userlisting && userlisting.length > 0 && userlisting.map((listing) => (
+              <Link key={listing._id} className='w-full flex flex-row relative m-2 h-[200px]'>
+                  <img className='w-1/2 h-full object-cover' src={listing.imageUrls[0]} alt='listing images' />
+                  <div className='w-1/2 h-full flex flex-col justify-center items-center'>
+                    <p>{listing.name}</p>
+                    <p>{listing.description}</p>
+                    <p>{listing.address}</p>
+                  </div>
+                  <div>
+                    <button className='text-red-600'>Delete</button>
+                    <button className='text-green-600'>Edit</button>
+                  </div>
+              </Link>
+          ))}
+        </div>
     </div>
   )
 }
