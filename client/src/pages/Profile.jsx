@@ -134,6 +134,23 @@ const Profile = () => {
       
     }
   }
+  const handleDeleteListing = async (id) => {
+    try {
+      const res = await fetch(`/api/v1/listing/delete/${id}`,{
+        method:"DELETE",
+      })
+      const data = await res.json()
+      if(data.success === false){
+        console.log(data.message)
+        return
+      }
+      setuserlisting((prev)=>{
+        prev.filter((listing)=>  listing._id !== id )
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div>
       <h1 className='text-3xl font-semibold text-center my-6'>Profile</h1>
@@ -173,7 +190,7 @@ const Profile = () => {
                     <p>{listing.address}</p>
                   </div>
                   <div>
-                    <button className='text-red-600'>Delete</button>
+                    <button type='button' onClick={()=>handleDeleteListing(listing._id)} className='text-red-600'>Delete</button>
                     <button className='text-green-600'>Edit</button>
                   </div>
               </Link>
