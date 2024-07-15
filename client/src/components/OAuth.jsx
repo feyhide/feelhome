@@ -41,8 +41,9 @@ const OAuth = () => {
     };
 
     return (
-        <button onClick={handleGoogleClick} type='button' className='bg-red-700 text-white p-3 rounded-lg uppercase'>
-            Continue with Google
+        <button onClick={handleGoogleClick} type='button' className='gap-2 flex items-center justify-center bg-slate-200 border border-white bg-opacity-60 backdrop-blur-xl h-10 transition-all ease text-black rounded-lg uppercase w-[70%] '>
+            <div className='w-9 h-full relative'><img className='w-full h-full object-contain' src='/googleicon.png'/></div>
+            <p>Continue With Google</p>
         </button>
     );
 };

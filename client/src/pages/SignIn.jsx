@@ -42,20 +42,14 @@ const SignIn = () => {
     }
 
   return (
-    <div className='p-3 max-w-lg mx-auto'>
-      <h1 className='text-3xl text-center font-semibold my-7'>Sign In</h1>
-      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-        <input onChange={handleChange} type='text' placeholder='email' className='border p-3 rounded-lg' id='email'/>
-        <input onChange={handleChange} type='password' placeholder='password' className='border p-3 rounded-lg' id='password'/>
-        <button disabled={loading} className='bg-slate-700 text-white p-3 rounded-lg uppercase'>{loading ? 'Loading...':'Sign Up'}</button>
+    <div className='font-main w-full h-full flex flex-col items-center justify-center p-3'>
+      <h1 className='text-4xl text-center font-bold tracking-tighter my-7'>Sign In</h1>
+      <form onSubmit={handleSubmit} className='flex w-full flex-col gap-4 items-center'>
+        <input onChange={handleChange} type='text' placeholder='Email Address' className='border p-3 rounded-lg w-[70%] tracking-tight bg-slate-100 border-slate-200' id='email'/>
+        <input onChange={handleChange} type='password' placeholder='Password' className='border p-3 rounded-lg w-[70%] tracking-tight bg-slate-100 border-slate-200' id='password'/>
+        <button disabled={loading} className='bg-slate-200 border border-white bg-opacity-60 backdrop-blur-xl h-10 transition-all ease text-black rounded-lg uppercase w-[70%] '>{loading ? 'Loading...':'Sign In'}</button>
         <OAuth/>
       </form>
-      <div className='flex gap-2 mt-6'>
-        <p>have an account ?</p>
-        <Link to="/signup">
-            <span className='text-blue-700'>Don't have a account</span>
-        </Link>
-      </div>
       {error && <p className='text-red-500 mt-5'>{error}</p>}
     </div>
   )

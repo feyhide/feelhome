@@ -152,7 +152,7 @@ const Profile = () => {
     }
   }
   return (
-    <div>
+    <div className='w-screen h-screen flex'>
       <h1 className='text-3xl font-semibold text-center my-6'>Profile</h1>
       <form onSubmit={handleSubmit} className='flex w-full flex-col items-center justify-center gap-4'>
         <input onChange={(e)=>setfile(e.target.files[0])} accept='image/*' type='file' ref={imageRef} hidden/>
@@ -181,7 +181,7 @@ const Profile = () => {
         <p className='mt-5 text-red-700'>{error? error : ''}</p>
         <div className='w-full flex flex-col p-4 items-center justify-center'>
           <button onClick={handleShowListing} className='mb-5 w-[50%] bg-slate-700 text-white p-3 rounded-lg uppercase'>Show Listings</button>
-          {userlisting && userlisting.length > 0 && userlisting.map((listing) => (
+          {/* {userlisting && userlisting.length > 0 && userlisting.map((listing) => (
               <Link key={listing._id} className='w-full flex flex-row relative m-2 h-[200px]'>
                   <img className='w-1/2 h-full object-cover' src={listing.imageUrls[0]} alt='listing images' />
                   <div className='w-1/2 h-full flex flex-col justify-center items-center'>
@@ -196,7 +196,7 @@ const Profile = () => {
                     </Link>
                   </div>
               </Link>
-          ))}
+          ))} */}
         </div>
     </div>
   )
