@@ -100,7 +100,7 @@ export const getAll = async(req,res,next)=>{
             parking,
             type
         }).sort(
-            {[sort]: order}
+            {[sort]: order}  
         ).limit(limit).skip(startIndex)
 
         return res.status(200).json(listings)
