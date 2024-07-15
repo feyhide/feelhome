@@ -47,7 +47,7 @@ const MapComponent = ({ location }) => {
 
     return (
         <div className='w-full h-full'>
-            <MapContainer center={geoCode} zoom={13} className='w-full h-full' ref={mapRef}>
+            <MapContainer center={geoCode} zoom={11} className='w-full h-full' ref={mapRef}>
                 <TileLayer
                     url="https://tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token=9lw3SXFhb6I62TLQOh3qkT2m8orxamEsr90FCa0LPnXxfJYCH9FQpXBZ7S64fTJA"
                 />

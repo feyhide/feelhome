@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import Contact from './Contact'
+import Message from './Message'
 
 const ListingPage = () => {
     const {currentUser} = useSelector(state=>state.user)
@@ -56,8 +57,8 @@ const ListingPage = () => {
                 </div>
             </div>
         </div>
-        <div className='w-screen h-[90vh] flex'>
-            <div className='w-1/2 h-full relative items-center justify-center  flex flex-wrap'>
+        <div className='w-screen h-[90vh] flex gap-2'>
+            <div className='w-1/2 h-full relative items-center justify-end  flex flex-wrap'>
                 <div className='w-[80%] h-[90%] absolute rounded-xl overflow-hidden'>
                     {listing && listing.imageUrls && (
                         <img className='w-full h-full object-cover' src={listing.imageUrls[imageNo]}/>
@@ -69,12 +70,20 @@ const ListingPage = () => {
                     </div>
                 </div>
             </div>
-            <div className='w-1/2 h-full flex items-center justify-center'>  
-                <div className='w-[80%] bg-red-200 rounded-xl h-[90%] flex'>
+            <div className='w-1/2 h-full flex items-center justify-start'>  
+                <div className='w-[80%] bg-white rounded-xl h-[90%] flex'>
                     <Contact listing={listing}/>
                 </div>
             </div>
         </div>
+        {listing && listing.imageUrls && (
+            <div className='w-screen mt-10 relative text-black h-[50vh]'>
+                <img className='w-full h-full object-cover' src={listing.imageUrls[0]}/>
+                <div className='w-full h-full absolute top-0'>
+                    <Message listing={listing} />
+                </div>
+            </div>
+        )}
         </>
     )
 }

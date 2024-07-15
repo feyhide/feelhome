@@ -5,10 +5,6 @@ import MapComponent from './MapComponent'
 const Contact = ({listing}) => {
     const [Landlord,setLandLord] = useState(null)
     const [posttime,setposttime] = useState('')
-    const [message,setmessage] = useState(null)
-    const handlemessage = (e) => {
-        setmessage(e.target.value)
-    }
     useEffect(()=>{
         const fetchLandLord = async () => {
             try {
@@ -25,6 +21,8 @@ const Contact = ({listing}) => {
         fetchLandLord()
     },[listing.userRef])
 
+    console.log(Landlord)
+
     useEffect(()=>{
         const time = listing.createdAt
         let date = null
@@ -38,7 +36,7 @@ const Contact = ({listing}) => {
     return (
     <>
     {Landlord && (
-        <div className='w-full h-full flex flex-col'>
+        <div className='w-full h-full flex flex-col rounded-xl overflow-hidden'>
         <div className='font-main gap-2 tracking-[-1px] p-4 w-full h-[60%] flex flex-col'>
             <div>
                 <p className='w-full text-center pt-3 text-3xl'>Listed By <span className='font-bold'>{Landlord.username}</span></p>
@@ -90,13 +88,9 @@ const Contact = ({listing}) => {
                     <p>{posttime}</p>
                 </div>
             </div>
-            {/* <textarea name='message' placeholder='Message....' value={message} onChange={handlemessage} id='message' rows='2'></textarea>
-            <Link to={`mailto:${Landlord.email}?subject=Regrading ${listing.name}&body=${message}`}>
-            Send Message
-            </Link> */}
         </div>
         <div className='w-full bg-green-200 relative h-[40%]'>
-                <MapComponent location={"karachi,pakistan"}/>
+            <MapComponent location={"karachi,pakistan"}/>
         </div>
     </div>
     )}
