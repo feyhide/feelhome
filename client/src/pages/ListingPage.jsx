@@ -64,7 +64,7 @@ const ListingPage = () => {
                     )}
                     <div className='absolute flex justify-center items-center gap-4 w-full h-[100px] bg-white bg-opacity-80 bottom-10'>
                         {listing && listing.imageUrls && listing.imageUrls.map((url, index) => (
-                            <img onClick={()=>setimageNo(index)} className='w-20 h-20' src={url} key={index} />
+                            <img onClick={()=>setimageNo(index)} className='w-20 h-20 object-contain' src={url} key={index} />
                         ))}
                     </div>
                 </div>
@@ -74,7 +74,6 @@ const ListingPage = () => {
                     <Contact listing={listing}/>
                 </div>
             </div>
-
         </div>
         </>
     )
