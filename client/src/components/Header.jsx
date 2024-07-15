@@ -35,7 +35,7 @@ const Header = () => {
   console.log(signIn,signUp)
   return (
     <>
-      <div className='flex w-full h-[80px] absolute top-0 bg-white justify-between items-center py-3 mx-auto px-40'>
+      <div className='flex w-full h-[80px] fixed top-0 z-50 bg-white justify-between items-center py-3 mx-auto px-40'>
         <div className='relative w-[200px] h-full'>
           <img className='w-full h-full object-contain' src='/feelhome.png'/>
         </div>

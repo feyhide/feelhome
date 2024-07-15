@@ -6,6 +6,7 @@ import { deleteFailure, deleteUserStart, deleteUserSuccess, signOutFailure, sign
 import {Link} from 'react-router-dom'
 const Profile = () => {
   const dispatch = useDispatch()
+  const [update,setupdate] = useState(false)
   const {loading,error,currentUser} = useSelector((state)=> state.user)
   const [userlisting,setuserlisting] = useState({})
   const imageRef = useRef(null)
@@ -134,6 +135,11 @@ const Profile = () => {
       
     }
   }
+  
+  useEffect(()=>{
+    handleShowListing()
+  },[])
+
   const handleDeleteListing = async (id) => {
     try {
       const res = await fetch(`/api/v1/listing/delete/${id}`,{
@@ -152,53 +158,95 @@ const Profile = () => {
     }
   }
   return (
-    <div className='w-screen h-screen flex'>
-      <h1 className='text-3xl font-semibold text-center my-6'>Profile</h1>
-      <form onSubmit={handleSubmit} className='flex w-full flex-col items-center justify-center gap-4'>
-        <input onChange={(e)=>setfile(e.target.files[0])} accept='image/*' type='file' ref={imageRef} hidden/>
-        <img onClick={()=>imageRef.current.click()} className="w-20 h-20 rounded-full" src={formData.avatar || currentUser.avatar} alt=""/>
-        {
-          fileerror ? (
-            <p className='text-red-700'>Error Uploading File</p>
-          ) : (
-            filepercentage > 0 && filepercentage < 100 ? (
-              <p className='text-green-700'>Uploading {filepercentage}%</p>
-            ) : (
-              ""
-            )
-          )
-        }
-        <input type='text' onChange={handleChange} defaultValue={currentUser.username} placeholder='username' className='w-[50%] border p-3 rounded-lg' id='username'/>
-        <input type='text' onChange={handleChange} defaultValue={currentUser.email} placeholder='email' className='w-[50%] border p-3 rounded-lg' id='email'/>
-        <input type='password' onChange={handleChange} placeholder='password' className='w-[50%] border p-3 rounded-lg' id='password'/>
-        <button type='submit' disabled={loading} className='w-[50%] bg-slate-700 text-white p-3 rounded-lg uppercase'>{loading ? "Loading..." : "Update"}</button>
-        <Link className='w-[50%] text-center bg-green-700 text-white p-3 rounded-lg uppercase' to={'/create-listing'}>Create Listing</Link>
-      </form>
-      <div className='flex justify-between px-52 py-2 text-red-600'>
-        <span onClick={handleDeleteUser}>Delete Account</span>
-        <span onClick={handleSignout}>Sign Out</span>
-      </div>
-        <p className='mt-5 text-red-700'>{error? error : ''}</p>
-        <div className='w-full flex flex-col p-4 items-center justify-center'>
-          <button onClick={handleShowListing} className='mb-5 w-[50%] bg-slate-700 text-white p-3 rounded-lg uppercase'>Show Listings</button>
-          {/* {userlisting && userlisting.length > 0 && userlisting.map((listing) => (
-              <Link key={listing._id} className='w-full flex flex-row relative m-2 h-[200px]'>
-                  <img className='w-1/2 h-full object-cover' src={listing.imageUrls[0]} alt='listing images' />
-                  <div className='w-1/2 h-full flex flex-col justify-center items-center'>
-                    <p>{listing.name}</p>
-                    <p>{listing.description}</p>
-                    <p>{listing.address}</p>
+    <>
+    {
+      update && (
+        <div className='w-screen h-screen z-30 flex items-center justify-center bg-black bg-opacity-50 fixed top-0'>
+          <div className='w-1/2 h-[500px] bg-white relative'>
+              <div onClick={()=>{setupdate(false)}} className='absolute z-10 top-5 left-5 w-10 h-10'>
+                <img src='/arrowback.png' alt='Back' />
+              </div>
+              <div className='font-main absolute font-bold tracking-[-3px] text-4xl text-center flex items-center justify-center w-full h-1/5'>
+                Update Profile
+              </div>
+              <form onSubmit={handleSubmit} className='flex w-full h-full items-center justify-center gap-2'>
+                <div className=' w-1/2 h-full flex flex-col items-end justify-center'>
+                  <input onChange={(e)=>setfile(e.target.files[0])} accept='image/*' type='file' ref={imageRef} hidden/>
+                  <div className='w-1/2 h-1/2 overflow-hidden rounded-xl relative '>
+                    <img onClick={()=>imageRef.current.click()} className="w-full h-full object-cover" src={formData.avatar || currentUser.avatar} alt=""/>
                   </div>
-                  <div>
-                    <button type='button' onClick={()=>handleDeleteListing(listing._id)} className='text-red-600'>Delete</button>
+                  {
+                    fileerror ? (
+                      <p className='px-10 text-red-700'>Error Uploading File</p>
+                    ) : (
+                      filepercentage > 0 && filepercentage < 100 ? (
+                        <p className='px-10 text-green-700'>Uploading {filepercentage}%</p>
+                      ) : (
+                        ""
+                      )
+                    )
+                  }
+                </div>
+                <div className='flex gap-2 mt-10 font-main justify-center text-lg w-1/2 h-full flex-col'>  
+                  <div className='w-full h-full  flex flex-col gap-2 justify-center'>
+                    <input type='text' onChange={handleChange} defaultValue={currentUser.username} placeholder='username' className='border p-3 rounded-lg w-[80%] tracking-tight bg-slate-100 border-slate-200' id='username'/>
+                    <input type='text' onChange={handleChange} defaultValue={currentUser.email} placeholder='email' className='border p-3 rounded-lg w-[80%] tracking-tight bg-slate-100 border-slate-200' id='email'/>
+                    <input type='password' onChange={handleChange} placeholder='password' className='border p-3 rounded-lg w-[80%] tracking-tight bg-slate-100 border-slate-200' id='password'/>
+                    <button type='submit' disabled={loading} className='bg-slate-200 border border-white bg-opacity-60 backdrop-blur-xl h-10 transition-all ease text-black rounded-lg uppercase w-[80%]'>{loading ? "Loading..." : "Update"}</button>
+                    <Link className='bg-green-500 border border-white bg-opacity-80 backdrop-blur-xl h-10 transition-all ease text-black text-center rounded-lg uppercase w-[80%] flex items-center justify-center ' to={'/create-listing'}>Create Listing</Link>
+                    <div className='flex flex-col text-red-600'>
+                      <span className='w-[80%] text-center' onClick={handleDeleteUser}>Delete Account</span>
+                      <span className='w-[80%] text-center' onClick={handleSignout}>Sign Out</span>
+                    </div>
+                    <p className='text-red-700'>{error? error : ''}</p>
+                  </div>
+                </div>
+              </form>
+          </div>
+        </div>
+      )
+    }
+    <div className='w-screen relative gap-4 font-main h-1/2 mt-[100px] items-center justify-center flex-col flex'>
+      <div className='font-main font-bold tracking-[-3px] mt-10 text-5xl text-center flex items-center justify-center w-full h-1/6'>
+        Your Profile
+      </div>
+      <div className=' w-full h-1/4 flex flex-col gap-2'>
+        <div className='w-full h-1/2 relative flex justify-center items-center'>
+          <div className='bg-red-600 w-[100px] rounded-full h-[100px] overflow-hidden'>
+            <img src={formData.avatar || currentUser.avatar}/>
+          </div>
+        </div>
+        <div className='text-xl w-full flex-col h-1/2 relative flex justify-start items-center'>
+          <img onClick={()=>{setupdate(true)}} className='w-5 h-5' src='/editicon.png'/>
+          <h1 className='font-semibold'>@{currentUser.username}</h1>
+          <h1 className='text-sm'>{currentUser.email}</h1>
+        </div>
+      </div>
+    </div>
+    <div className='flex flex-col gap-2 mt-10'>
+      <div className='mt-2 -mb-2 font-main font-bold tracking-[-3px] text-5xl text-center flex px-10 items-end justify-center w-full h-1/6'>
+        Your Listings
+      </div>
+      <div className='flex w-full min-h-4/5 flex-wrap px-10 gap-4 justify-center'>
+        {userlisting && userlisting.length > 0 && userlisting.map((listing) => (
+              <Link to={`/listing/${listing._id}`} key={listing._id} className=' flex-shrink-0 w-[300px] h-[250px] rounded-xl overflow-hidden flex flex-row relative'>
+                  <img className='w-full h-full object-cover' src={listing.imageUrls[0]} alt='listing images' />
+                  <div className='w-full bg-black bg-opacity-60 text-white font-light absolute h-full flex flex-col justify-end p-2 items-start'>
+                    <p className='font-semibold tracking-tighter'>{listing.name}</p>
+                    <p className='text-light text-sm'>{listing.description}</p>
+                    <p className='text-light text-sm'>{listing.address}</p>
+                    </div>
+                    <div>
+                    {/* <button type='button' onClick={()=>handleDeleteListing(listing._id)} className='text-red-600'>Delete</button>
                     <Link to={`/update-listing/${listing._id}`}>
                       <button className='text-green-600'>Edit</button>
-                    </Link>
+                    </Link> */}
                   </div>
               </Link>
-          ))} */}
-        </div>
+          ))}
+      </div>
     </div>
+  </>
   )
 }
 
