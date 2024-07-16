@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import listing from '../../../api/models/listing.model';
 
 const ListingBox = ({ id }) => {
   const [userlisting, setUserListing] = useState([]);
@@ -58,7 +59,9 @@ const ListingBox = ({ id }) => {
             </div>
             </Link>
         ))}
-
+        {userlisting.length < 1 && (
+            <h1 className='font-main text-xl tracking-[-1px]'>You currently have no listing</h1>
+        )}
     </>
   );
 };
