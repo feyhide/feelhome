@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Contact from './Contact'
 import Message from './Message'
 import ListingPageRecommendation from './ListingPageRecommendation'
@@ -73,8 +73,15 @@ const ListingPage = () => {
                     </div>
                 </div>
             </div>
-            <div className='w-1/2 h-full flex items-center justify-start'>  
-                <div className='w-[80%] bg-white rounded-xl h-[90%] flex'>
+            <div className='w-1/2 relative h-full flex items-center justify-start'>
+                <div className='w-[80%] bg-white relative rounded-xl h-[90%] flex'>
+                    {currentUser._id === listing.userRef && (
+                        <div className='absolute top-5 right-5'>
+                            <Link to={`/update-listing/${listing._id}`} className='w-5 h-5'>
+                                <img className='w-full h-full object-contain' src='/editicon.png'/>
+                            </Link>
+                        </div>
+                    )}
                     <Contact listing={listing}/>
                 </div>
             </div>
@@ -93,5 +100,10 @@ const ListingPage = () => {
         </>
     )
 }
+
+{/* <button type='button' onClick={() => handleDeleteListing(listing._id)} className='text-red-600'>Delete</button>
+            <Link to={`/update-listing/${listing._id}`}>
+              <button className='text-green-600'>Edit</button>
+            </Link> */}
 
 export default ListingPage

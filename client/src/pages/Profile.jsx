@@ -124,41 +124,7 @@ const Profile = () => {
       }
     }
 
-    const handleShowListing = async() => {
-      try {
-        const res = await fetch(`/api/v1/user/listings/${currentUser._id}`)
-        const data = await res.json()
-        if(data.success === false){
-          return
-        }
-        setuserlisting(data)
-        //console.log(data)
-      } catch (error) {
-        
-      }
-    }
     
-    useEffect(()=>{
-      handleShowListing()
-    },[])
-
-    const handleDeleteListing = async (id) => {
-      try {
-        const res = await fetch(`/api/v1/listing/delete/${id}`,{
-          method:"DELETE",
-        })
-        const data = await res.json()
-        if(data.success === false){
-          console.log(data.message)
-          return
-        }
-        setuserlisting((prev)=>{
-          prev.filter((listing)=>  listing._id !== id )
-        })
-      } catch (error) {
-        console.log(error)
-      }
-    }
     return (
         <>
         {

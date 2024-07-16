@@ -5,6 +5,7 @@ import MapComponent from './MapComponent'
 const Contact = ({listing}) => {
     const [Landlord,setLandLord] = useState(null)
     const [posttime,setposttime] = useState('')
+    
     useEffect(()=>{
         const fetchLandLord = async () => {
             try {
@@ -90,7 +91,7 @@ const Contact = ({listing}) => {
             </div>
         </div>
         <div className='w-full bg-green-200 relative h-[40%] z-0'>
-            <MapComponent location={"karachi,pakistan"}/>
+            <MapComponent location={listing.address}/>
         </div>
     </div>
     )}

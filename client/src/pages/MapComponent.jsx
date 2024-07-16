@@ -31,11 +31,16 @@ const MapComponent = ({ location }) => {
                 const response = await axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${location}&limit=1`);
                 if (response.data && response.data.length > 0) {
                     const { lat, lon } = response.data[0];
-                    setGeoCode([parseFloat(lat), parseFloat(lon)]);
+                    const newGeoCode = [parseFloat(lat), parseFloat(lon)];
+                    setGeoCode(newGeoCode);
                     setMarkers({
-                        geoCode: [parseFloat(lat), parseFloat(lon)],
+                        geoCode: newGeoCode,
                         popUp: location
                     });
+                    
+                    if (mapRef.current) {
+                        mapRef.current.setView(newGeoCode, 11);
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching location:', error);
