@@ -2,34 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MapComponent from './MapComponent';
 
-const Contact = ({ listing }) => {
-    const [Landlord, setLandlord] = useState(null);
+const Contact = ({Landlord, listing }) => {
     const [posttime, setPostTime] = useState('');
     const [fulldesc, setFulldesc] = useState([]);
     const [shortdesc, setShortdesc] = useState('');
     const [descActive, setDescActive] = useState(false);
 
-    // Fetch landlord data
-    useEffect(() => {
-        const fetchLandlord = async () => {
-            try {
-                const res = await fetch(`/api/v1/user/${listing.userRef}`);
-                const data = await res.json();
-                if (data.success === false) {
-                    return;
-                }
-                setLandlord(data);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
-        if (listing.userRef) {
-            fetchLandlord();
-        }
-    }, [listing.userRef]);
-
-    // Format post time
     useEffect(() => {
         if (listing.createdAt) {
             const time = listing.createdAt;
@@ -38,7 +16,6 @@ const Contact = ({ listing }) => {
         }
     }, [listing.createdAt]);
 
-    // Set full and short descriptions
     useEffect(() => {
         // if (listing.description) {
         //     let temp = listing.description;
@@ -62,7 +39,7 @@ const Contact = ({ listing }) => {
             temp2 = temp2.split("\n")
             setShortdesc(temp2)
         }
-        console.log(listing.description)
+        //console.log(listing.description)
     }, [listing.description]);
 
     return (

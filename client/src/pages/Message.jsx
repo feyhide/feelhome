@@ -1,30 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const Message = ({ listing }) => {
-    const [Landlord, setLandLord] = useState(null);
+const Message = ({ Landlord,listing }) => {
     const [message,setmessage] = useState(null)
     const handlemessage = (e) => {
         setmessage(e.target.value)
     }
-
-    useEffect(()=>{
-        const fetchLandLord = async () => {
-            try {
-                const res = await fetch(`/api/v1/user/${listing.userRef}`)
-                const data = await res.json()
-                if(data.success === false){
-                    return 
-                }
-                setLandLord(data)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        fetchLandLord()
-    },[listing.userRef])
-
-
     return (
         Landlord && (
             <>

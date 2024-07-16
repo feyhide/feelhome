@@ -5,6 +5,7 @@ import { app } from '../firebase'
 import { deleteFailure, deleteUserStart, deleteUserSuccess, reset, signOutFailure, signOutUserStart, signOutUserSuccess, updateFailure, updateUserStart, updateUserSuccess } from '../redux/user/userSlice'
 import {Link, useNavigate, useParams} from 'react-router-dom'
 import ListingBox from '../components/ListingBox'
+import ListingBoxProfile from '../components/ListingBoxProfile'
 
 const Profile = () => { 
     const [currentProfile,setcurrentProfile] = useState({})
@@ -166,7 +167,7 @@ const Profile = () => {
         {
           currentUser._id === currentProfile._id && update && (
             <div className='w-screen h-screen z-30 flex flex-col items-center justify-center bg-black bg-opacity-50 fixed top-0'>
-              <div className='w-1/2 h-[500px] flex flex-col items-center justify-center  bg-white relative'>
+              <div className='w-1/2 h-[500px] flex flex-col items-center justify-center  bg-white rounded-xl relative'>
                   <div onClick={()=>{setupdate(false)}} className='absolute z-10 top-5 left-5 w-10 h-10'>
                     <img src='/arrowback.png' alt='Back' />
                   </div>
@@ -209,10 +210,10 @@ const Profile = () => {
           )
         }
         <div className='w-screen relative gap-4 font-main h-1/2 mt-[100px] items-center justify-center flex-col flex'>
-          <div className='font-main font-bold tracking-[-3px] mt-10 text-5xl text-center flex items-center justify-center w-full h-1/6'>
-            {currentUser._id === currentProfile._id ? "Your Profile" : ``}
-          </div>
-          <div className=' w-full h-1/4 flex flex-col gap-2'>
+          <div className='w-full bg-white h-1/4 p-10 my-10 flex flex-col gap-2'>
+            <div className='font-main font-bold tracking-[-3px] text-5xl text-center flex items-center justify-center w-full h-1/6'>
+              {currentUser._id === currentProfile._id ? "Your Profile" : ``}
+            </div>
             <div className='w-full h-1/2 relative flex justify-center items-center'>
               <div className='bg-red-600 w-[100px] rounded-full h-[100px] overflow-hidden'>
                 <img src={currentProfile.avatar}/>
@@ -232,12 +233,12 @@ const Profile = () => {
             {currentUser._id === currentProfile._id ? (
               <div className='w-full flex flex-col items-center p-2'>
                 <p>Your Listing</p>
-                <Link to={'/create-listing'} className='text-xl tracking-[-1px] font-semibold bg-green-500 p-3 w-[20%] rounded-lg text-white'>Create Listing</Link>
+                <Link to={'/create-listing'} className='text-xl tracking-[-1px] font-semibold bg-green-500 p-1 w-[10%] rounded-lg text-white'>Create Listing</Link>
               </div>
             ) : `${currentProfile.username}'s Listings`}
           </div>
           <div className='flex w-full min-h-4/5 tracking-[0px] flex-wrap px-10 gap-4 justify-center'>
-            <ListingBox id={params.profileID}/>
+            <ListingBoxProfile id={params.profileID}/>
           </div>
         </div>
       </>

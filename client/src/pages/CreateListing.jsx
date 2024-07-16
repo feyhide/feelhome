@@ -41,6 +41,8 @@ const CreateListing = () => {
                 console.log(err)
                 setimageUploadError("Image Upload Failed (2 mb max)")
             })
+        }else if(files.length + formData.imageUrls.length === 0){
+            setimageUploadError("Image Upload Failed (at least one image)")
         }else{
             setimageUploadError("Image Upload Failed (only 6 images)")
         }
@@ -85,7 +87,7 @@ const CreateListing = () => {
             if (e.target.id === 'sale') {
                 setformData(prevState => ({
                     ...prevState,
-                    pricetype: ''
+                    pricetype: 'total'
                 }));
             } else if (e.target.id === 'rent') {
                 setformData(prevState => ({

@@ -1,29 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import ListingBox from '../components/ListingBox';
 import { useSelector } from 'react-redux';
+import ListingBoxProfile from '../components/ListingBoxProfile';
 
-const ListingPageRecommendation = ({listing}) => {
-    const [Landlord, setLandLord] = useState(null);
+const ListingPageRecommendation = ({Landlord,listing}) => {
 
     const [userlisting,setuserlisting] = useState({})
 
     const {currentUser} = useSelector(state=>state.user)
-    
-    useEffect(()=>{
-        const fetchLandLord = async () => {
-            try {
-                const res = await fetch(`/api/v1/user/${listing.userRef}`)
-                const data = await res.json()
-                if(data.success === false){
-                    return 
-                }
-                setLandLord(data)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        fetchLandLord()
-    },[listing.userRef])
+
 
     const handleShowListing = async() => {
         try {

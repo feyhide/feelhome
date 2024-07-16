@@ -7,6 +7,7 @@ import ListingPageRecommendation from './ListingPageRecommendation'
 
 const ListingPage = () => {
     const {currentUser} = useSelector(state=>state.user)
+    const [Landlord, setLandLord] = useState(null);
     const [listing, setListing] = useState({})
     const [contact,setContact] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -39,6 +40,22 @@ const ListingPage = () => {
     }, [params.listingID])
 
     console.log(listing)
+
+    useEffect(()=>{
+        const fetchLandLord = async () => {
+            try {
+                const res = await fetch(`/api/v1/user/${listing.userRef}`)
+                const data = await res.json()
+                if(data.success === false){
+                    return 
+                }
+                setLandLord(data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchLandLord()
+    },[listing.userRef])
 
     return (
         <>
@@ -81,7 +98,7 @@ const ListingPage = () => {
                             <img className='w-full h-full object-contain' src='/editicon.png'/>
                         </Link>
                     )}
-                    <Contact listing={listing}/>
+                    <Contact Landlord={Landlord} listing={listing}/>
                 </div>
             </div>
         </div>
@@ -89,12 +106,20 @@ const ListingPage = () => {
             <div className='w-screen mt-10 relative text-black h-[50vh]'>
                 <img className='w-full h-full object-cover' src={listing.imageUrls[0]}/>
                 <div className='w-full h-full absolute top-0'>
-                    <Message listing={listing} />
+                    <Message Landlord={Landlord} listing={listing} />
                 </div>
             </div>
         )}
+        {Landlord && currentUser._id !== Landlord._id && (
+            <Link to={`/profile/${Landlord._id}`} className='w-screen h-[30vh] tracking-[-1.5px] font-main flex flex-col items-center justify-center text-2xl bg-white my-2'>
+                <div className='w-[100px] h-[100px] rounded-full overflow-hidden bg-red-200'>
+                    <img className='w-full h-full object-cover' src={Landlord.avatar}/>
+                </div>
+                <h1>See <span className='font-semibold'>{Landlord.username}'s</span> Profile</h1>
+            </Link>
+        )}
         <div className='w-screen bg-white'>
-            <ListingPageRecommendation listing={listing}/>
+            <ListingPageRecommendation Landlord={Landlord} listing={listing}/>
         </div>
         </>
     )

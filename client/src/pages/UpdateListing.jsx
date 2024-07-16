@@ -100,7 +100,7 @@ const UpdateListing = () => {
             if (e.target.id === 'sale') {
                 setformData(prevState => ({
                     ...prevState,
-                    pricetype: ''
+                    pricetype: 'total'
                 }));
             } else if (e.target.id === 'rent') {
                 setformData(prevState => ({
