@@ -89,7 +89,7 @@ const Contact = ({listing}) => {
                 </div>
             </div>
         </div>
-        <div className='w-full bg-green-200 relative h-[40%]'>
+        <div className='w-full bg-green-200 relative h-[40%] z-0'>
             <MapComponent location={"karachi,pakistan"}/>
         </div>
     </div>

@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import Contact from './Contact'
 import Message from './Message'
+import ListingPageRecommendation from './ListingPageRecommendation'
 
 const ListingPage = () => {
     const {currentUser} = useSelector(state=>state.user)
@@ -12,6 +13,8 @@ const ListingPage = () => {
     const [error, setError] = useState(null)
     const [imageNo,setimageNo] = useState(0)
     
+    //console.log(currentUser,listing)
+
     const params = useParams()
 
     useEffect(() => {
@@ -76,7 +79,7 @@ const ListingPage = () => {
                 </div>
             </div>
         </div>
-        {listing && listing.imageUrls && (
+        {currentUser._id === listing.userRef &&  listing && listing.imageUrls && (
             <div className='w-screen mt-10 relative text-black h-[50vh]'>
                 <img className='w-full h-full object-cover' src={listing.imageUrls[0]}/>
                 <div className='w-full h-full absolute top-0'>
@@ -84,6 +87,9 @@ const ListingPage = () => {
                 </div>
             </div>
         )}
+        <div className='w-screen bg-white'>
+            <ListingPageRecommendation listing={listing}/>
+        </div>
         </>
     )
 }
