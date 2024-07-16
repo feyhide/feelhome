@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {getDownloadURL, getStorage,ref, uploadBytesResumable} from 'firebase/storage'
 import { app } from '../firebase'
 import { deleteFailure, deleteUserStart, deleteUserSuccess, reset, signOutFailure, signOutUserStart, signOutUserSuccess, updateFailure, updateUserStart, updateUserSuccess } from '../redux/user/userSlice'
-import {Link, useParams} from 'react-router-dom'
+import {Link, useNavigate, useParams} from 'react-router-dom'
 import ListingBox from '../components/ListingBox'
 
 const Profile = () => { 
@@ -18,6 +18,7 @@ const Profile = () => {
     const [filepercentage,setfilepercentage] = useState(0)
     const [fileerror,setfileerror] = useState(null)
     const [formData,setformData] = useState({})
+    const navigate = useNavigate()
     console.log(filepercentage)
     console.log(fileerror)
     console.log(formData)
@@ -64,7 +65,14 @@ const Profile = () => {
 
 
     const handleChange = (e) => {
-      setformData({...formData,[e.target.id]:e.target.value})
+      if(e.target.id === "username"){
+        let temp = e.target.value
+        temp = temp.split(' ').join('')
+        setformData({...formData,[e.target.id]: temp})
+      }else{
+        setformData({...formData,[e.target.id]: e.target.value})
+      }
+      console.log(formData)
     }
 
     const handleSubmit = async (e) => { 
@@ -86,7 +94,8 @@ const Profile = () => {
         }
         dispatch(updateUserSuccess(data))
         console.log("user updated:",data)
-
+        setupdate(false)
+        window.location.reload();
       } catch (error) {
         dispatch(updateFailure(error.message))
       }
@@ -121,6 +130,7 @@ const Profile = () => {
           return;
         }
         dispatch(signOutUserSuccess())
+        //navigate("/")
       } catch (error) {
         dispatch(signOutFailure(error.message))
         console.log(error.message)

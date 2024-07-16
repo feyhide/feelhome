@@ -108,14 +108,13 @@ const CreateListing = () => {
             })
         }
         
-        if (e.target.id === 'description') {
+        if(e.target.id !== 'description' && (e.target.type === 'number' || e.target.type === 'text')){
             setformData({
                 ...formData,
-                description: e.target.value
-            });
+                [e.target.id]: e.target.value
+            })
         }
-
-        if(e.target.type === 'number' || e.target.type === 'text'){
+        if(e.target.id === 'description'){
             setformData({
                 ...formData,
                 [e.target.id]: e.target.value
@@ -128,6 +127,11 @@ const CreateListing = () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault()
+        //const formattedDescription = formData.description.replace(/(\r\n|\n|\r)/gm, '(_)');
+        setformData({
+            ...formData,
+            description: formData.description
+        })
         try {
             if(formData.imageUrls.length < 1 ){
                 seterror("you must upload at least one image")

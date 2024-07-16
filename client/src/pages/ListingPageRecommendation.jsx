@@ -8,6 +8,7 @@ const ListingPageRecommendation = ({listing}) => {
     const [userlisting,setuserlisting] = useState({})
 
     const {currentUser} = useSelector(state=>state.user)
+    
     useEffect(()=>{
         const fetchLandLord = async () => {
             try {

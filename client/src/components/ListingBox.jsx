@@ -35,7 +35,7 @@ const ListingBox = ({ id }) => {
     }
     console.log(id)
     handleShowListing();
-  }, []);
+  }, [params.listingID]);
 
   console.log(userlisting)
 
