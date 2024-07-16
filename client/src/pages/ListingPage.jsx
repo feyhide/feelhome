@@ -37,6 +37,7 @@ const ListingPage = () => {
         }
         fetchListing()
     }, [params.listingID])
+    
     console.log(listing)
 
     return (
@@ -86,7 +87,7 @@ const ListingPage = () => {
                 </div>
             </div>
         </div>
-        {currentUser._id === listing.userRef &&  listing && listing.imageUrls && (
+        {currentUser._id !== listing.userRef &&  listing && listing.imageUrls && (
             <div className='w-screen mt-10 relative text-black h-[50vh]'>
                 <img className='w-full h-full object-cover' src={listing.imageUrls[0]}/>
                 <div className='w-full h-full absolute top-0'>

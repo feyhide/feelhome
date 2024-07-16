@@ -173,7 +173,7 @@ const UpdateListing = () => {
 
     return (
     <main className='p-3 w-screen flex flex-col justify-center items-center font-main tracking-[-1px] mx-auto mt-[100px]'>
-        <h1 className='text-4xl font-semibold text-center mt-10 mb-3'>Update Listing</h1>
+        <h1 className='text-5xl font-bold text-center tracking-[-2px] mt-10 mb-3'>Update Listing</h1>
         <form onSubmit={handleSubmit} className='flex flex-col gap-2 p-10 rounded-xl bg-white w-[80%] sm:flex-row'>
             <div className='flex flex-col gap-3 flex-1'>
                 <div className='flex flex-col'>

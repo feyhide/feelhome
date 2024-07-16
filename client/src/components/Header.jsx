@@ -55,7 +55,7 @@ const Header = () => {
               <li className='hidden tracking-tight sm:inline text-slate-500 text-[20px] transition-all ease hover:text-[22px] hover:underline hover:text-black'>sign in</li>
             </Link>
           ) : (
-            <Link to='/profile'>
+            <Link to={`/profile/${currentUser._id}`}>
               <img className='w-10 h-10 rounded-full' src={currentUser.avatar} alt=""/>
             </Link>
           )}

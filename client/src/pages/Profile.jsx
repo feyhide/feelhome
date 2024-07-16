@@ -3,10 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import {getDownloadURL, getStorage,ref, uploadBytesResumable} from 'firebase/storage'
 import { app } from '../firebase'
 import { deleteFailure, deleteUserStart, deleteUserSuccess, signOutFailure, signOutUserStart, signOutUserSuccess, updateFailure, updateUserStart, updateUserSuccess } from '../redux/user/userSlice'
-import {Link} from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 import ListingBox from '../components/ListingBox'
 
-const Profile = () => {
+const Profile = () => { 
+    const [currentProfile,setcurrentProfile] = useState({})
+    const params = useParams()
     const dispatch = useDispatch()
     const [update,setupdate] = useState(false)
     const {loading,error,currentUser} = useSelector((state)=> state.user)
@@ -31,7 +33,6 @@ const Profile = () => {
     //     }
     //   }
     // }
-
 
     useEffect(()=>{
       if(file){
@@ -124,11 +125,26 @@ const Profile = () => {
       }
     }
 
-    
+    useEffect(()=>{
+      const fetchProfile = async () => {
+          try {
+              const res = await fetch(`/api/v1/user/${params.profileID}`)
+              const data = await res.json()
+              if(data.success === false){
+                  return 
+              }
+              setcurrentProfile(data)
+          } catch (error) {
+              console.log(error)
+          }
+      }
+      fetchProfile()
+    },[params.profileID])
+
     return (
         <>
         {
-          update && (
+          currentUser._id === currentProfile._id && update && (
             <div className='w-screen h-screen z-30 flex items-center justify-center bg-black bg-opacity-50 fixed top-0'>
               <div className='w-1/2 h-[500px] bg-white relative'>
                   <div onClick={()=>{setupdate(false)}} className='absolute z-10 top-5 left-5 w-10 h-10'>
@@ -176,27 +192,29 @@ const Profile = () => {
         }
         <div className='w-screen relative gap-4 font-main h-1/2 mt-[100px] items-center justify-center flex-col flex'>
           <div className='font-main font-bold tracking-[-3px] mt-10 text-5xl text-center flex items-center justify-center w-full h-1/6'>
-            Your Profile
+            {currentUser._id === currentProfile._id ? "Your Profile" : ``}
           </div>
           <div className=' w-full h-1/4 flex flex-col gap-2'>
             <div className='w-full h-1/2 relative flex justify-center items-center'>
               <div className='bg-red-600 w-[100px] rounded-full h-[100px] overflow-hidden'>
-                <img src={formData.avatar || currentUser.avatar}/>
+                <img src={currentProfile.avatar}/>
               </div>
             </div>
             <div className='text-xl w-full flex-col h-1/2 relative flex justify-start items-center'>
-              <img onClick={()=>{setupdate(true)}} className='w-5 h-5' src='/editicon.png'/>
-              <h1 className='font-semibold'>@{currentUser.username}</h1>
-              <h1 className='text-sm'>{currentUser.email}</h1>
+              {currentUser._id === currentProfile._id && (
+                <img onClick={()=>{setupdate(true)}} className='w-5 h-5' src='/editicon.png'/>
+              )}
+              <h1 className='font-semibold'>@{currentProfile.username}</h1>
+              <h1 className='text-sm'>{currentProfile.email}</h1>
             </div>
           </div>
         </div>
         <div className='flex flex-col gap-2 mt-10'>
           <div className='mt-2 -mb-2 font-main font-bold tracking-[-3px] text-5xl text-center flex px-10 items-end justify-center w-full h-1/6'>
-            Your Listings
+            {currentUser._id === currentProfile._id ? "Your Listing" : `${currentProfile.username}'s Listings`}
           </div>
           <div className='flex w-full min-h-4/5 tracking-[0px] flex-wrap px-10 gap-4 justify-center'>
-            <ListingBox id={currentUser._id}/>
+            <ListingBox id={params.profileID}/>
           </div>
         </div>
       </>

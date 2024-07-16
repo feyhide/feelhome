@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 const ListingBox = ({ id }) => {
   const [userlisting, setUserListing] = useState([]);
   const [currentlisting,setcurrentlisting] = useState('')
+
   const params = useParams()
   const getDesc = (desc) => {
     if(desc.length > 30){
@@ -19,7 +20,7 @@ const ListingBox = ({ id }) => {
         return
       }
       setUserListing(data)
-      //console.log(data)
+      console.log(data)
     } catch (error) {
       
     }
@@ -28,10 +29,14 @@ const ListingBox = ({ id }) => {
 
   //console.log("id prop",id)
   useEffect(() => {
-    setcurrentlisting(params.listingID)
+    if(params.listingID){
+        setcurrentlisting(params.listingID)
+    }
+    console.log(id)
     handleShowListing();
   }, []);
 
+  console.log(userlisting)
 
   return (
     <>
@@ -53,6 +58,7 @@ const ListingBox = ({ id }) => {
             </div>
             </Link>
         ))}
+
     </>
   );
 };
