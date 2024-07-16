@@ -136,15 +136,25 @@ const CreateListing = () => {
         }
     }
     return (
-    <main className='p-3 max-w-4xl mx-auto'>
-        <h1 className='text-3xl font-semibold text-center my-7'>Create a Listing</h1>
-        <form onSubmit={handleSubmit} className='flex flex-col gap-2 sm:flex-row'>
+        <main className='p-3 w-screen flex flex-col justify-center items-center font-main tracking-[-1px] mx-auto mt-[100px]'>
+        <h1 className='text-5xl font-bold text-center tracking-[-2px] mt-10 mb-3'>Create Listing</h1>
+        <form onSubmit={handleSubmit} className='flex flex-col gap-2 p-10 rounded-xl bg-white w-[80%] sm:flex-row'>
             <div className='flex flex-col gap-3 flex-1'>
-                <input value={formData.name} onChange={handleChange} type='text' placeholder='Name' required minLength='10' maxLength="62" id='name' className='border p-3 rounded-lg'/>
-                <input value={formData.description} onChange={handleChange} type='text' required minLength='10' maxLength="62" id='description' placeholder='Description' className='border p-3 rounded-lg'/>
-                <input value={formData.address} onChange={handleChange} type='text' required minLength='10' maxLength="62" id='address' placeholder='Address' className='border p-3 rounded-lg'/>
-                <div className='flex gap-2'>
-                    <div className='flex gap-4 flex-wrap'>
+                <div className='flex flex-col'>
+                    <label className='font-semibold text-lg'>Title</label>
+                    <input value={formData.name} onChange={handleChange} type='text' placeholder='Name' required minLength='10' maxLength="62" id='name' className='bg-slate-300 border p-3 rounded-lg'/>
+                </div>
+                <div className='flex flex-col'>
+                    <label className='font-semibold text-lg'>Address</label>
+                    <input value={formData.address} onChange={handleChange} type='text' required minLength='10' maxLength="62" id='address' placeholder='Address' className='bg-slate-300 border p-3 rounded-lg'/>
+                </div>
+                <div className='flex flex-col'>
+                    <label className='font-semibold text-lg'>Description</label>
+                    <input value={formData.description} onChange={handleChange} type='text' required minLength='10' maxLength="62" id='description' placeholder='Description' className='bg-slate-300  border p-3 rounded-lg'/>
+                </div>
+                
+                <div className='flex gap-3'>
+                    <div className='flex gap-1 flex-wrap'>
                         <input checked={formData.type === "sale"} onChange={handleChange} type='checkbox' id='sale' className='w-5'/>
                         <span>Sell</span>
                     </div>
@@ -167,15 +177,15 @@ const CreateListing = () => {
                 </div>
                 <div className='flex gap-2 flex-wrap'>
                     <div className='flex gap-2 items-center'>
-                        <input value={formData.bedrooms} onChange={handleChange} className='border-gray-300 p-3 border' type='number' id='bedrooms' defaultValue='1' min='1' max='10' required/>
+                        <input value={formData.bedrooms} onChange={handleChange} className='bg-slate-300 rounded-lg border-gray-300 p-3 border' type='number' id='bedrooms' defaultValue='1' min='1' max='10' required/>
                         <span>Beds</span>
                     </div>
                     <div className='flex gap-2 items-center'>
-                        <input value={formData.bathrooms} onChange={handleChange} className='border-gray-300 p-3 border' type='number' id='bathrooms' min='1' max='10' required/>
+                        <input value={formData.bathrooms} onChange={handleChange} className='bg-slate-300 rounded-lg border-gray-300 p-3 border' type='number' id='bathrooms' min='1' max='10' required/>
                         <span>Baths</span>
                     </div>
                     <div className='flex gap-2 items-center'>
-                        <input value={formData.regularPrice} onChange={handleChange} className='border-gray-300 p-3 border' type='number' id='regularPrice' defaultValue='1' min='1' required/>
+                        <input value={formData.regularPrice} onChange={handleChange} className='bg-slate-300 rounded-lg border-gray-300 p-3 border' type='number' id='regularPrice' defaultValue='1' min='1' required/>
                         <div className='flex flex-col'>
                             <span>Regular Price</span>
                             <span className='text-sm'>($/Month)</span>
@@ -183,7 +193,7 @@ const CreateListing = () => {
                     </div>
                     {formData.offer ? (
                         <div className='flex gap-2 items-center'>
-                            <input value={formData.discountedPrice} onChange={handleChange} className='border-gray-300 p-3 border' type='number' id='discountedPrice' defaultValue='1' min='1' required/>
+                            <input value={formData.discountedPrice} onChange={handleChange} className='bg-slate-300 rounded-lg cborder-gray-300 p-3 border' type='number' id='discountedPrice' defaultValue='1' min='1' required/>
                             <div className='flex flex-col'>
                                 <span>Discounted Price</span>
                                 <span className='text-sm'>($/Month)</span>
@@ -192,22 +202,22 @@ const CreateListing = () => {
                     ): ""}
                 </div>
             </div>
-            <div className='flex flex-col flex-1'>
-                <p className='font-semibold'>Images:<span className='font-normal text-gray-700'>the first image will be the cover (max 6)</span></p>
-                <div className='flex  gap-4'>
-                    <input onChange={(e)=>setFiles(e.target.files)} className='p-2 border border-gray-300 rounded w-full' type='file' id='images' accept='image/*' multiple/>
-                    <button type='button' onClick={handleImage} className='p-3 text-white bg-green-600 border border-green-600 rounded uppercase'>Upload</button>
+            <div className='flex items-center justify-center flex-col gap-3 flex-1'>
+                <p className='font-semibold text-lg'>Images:<span className='px-2 font-normal text-gray-700'>the first image will be the cover (max 6)</span></p>
+                <div className='flex w-full gap-4'>
+                    <input onChange={(e)=>setFiles(e.target.files)} className='p-2 border border-gray-300 rounded-lg bg-slate-300 w-full' type='file' id='images' accept='image/*' multiple/>
                 </div>
+                <button type='button' onClick={handleImage} className='p-3 w-1/2 text-white bg-green-600 border border-green-600 rounded-lg uppercase'>Upload</button>
                 <p className='text-red-600'>{imageUploadError ? imageUploadError : ''}</p>
                 {
                     formData.imageUrls.length > 0 && formData.imageUrls.map((url, index) => (
-                        <div className='flex justify-between p-3 border items-center'>
-                            <img key={index} src={url} alt='listing image' className='w-20 h-20 object-contain rounded-lg'/>
+                        <div className='flex w-full h-[100px] rounded-xl justify-between p-3 border items-center'>
+                            <img key={index} src={url} alt='listing image' className='w-1/2 h-full object-contain rounded-lg'/>
                             <button onClick={()=>handleRemoveImage(index)} type='button' className='p-3 text-red-700 rounded-lg uppercase'>Delete</button>
                         </div>
                     ))
                 }
-                <button disabled={loading} className=' p-3 rounded-lg bg-slate-600 text-white'>{loading ? "Loading...": 'Create Listing'}</button>
+                <button disabled={loading} className=' p-3 rounded-lg w-1/2 bg-green-600 text-white'>{loading ? "Loading...": 'Create Listing'}</button>
                 {error ? <p className='text-sm text-red-600'>${error}</p> : ""}
             </div>
         </form>
