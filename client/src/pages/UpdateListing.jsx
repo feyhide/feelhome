@@ -11,7 +11,7 @@ const UpdateListing = () => {
     const [formData,setformData] = useState({
         imageUrls:[],
         name:'',
-        description:'',
+        description:``,
         address:'',
         type:'rent',
         bedrooms:1,
@@ -92,11 +92,27 @@ const UpdateListing = () => {
     }
 
     const handleChange = (e) => {
-        if(e.target.id === 'sale' || e.target.id === 'rent'){
+        if(e.target.id === 'sale' || e.target.id === 'rent' || e.target.id === 'hotel'){
             setformData({
                 ...formData,
                 type:e.target.id
             })
+            if (e.target.id === 'sale') {
+                setformData(prevState => ({
+                    ...prevState,
+                    pricetype: ''
+                }));
+            } else if (e.target.id === 'rent') {
+                setformData(prevState => ({
+                    ...prevState,
+                    pricetype: 'month'
+                }));
+            } else if (e.target.id === 'hotel') {
+                setformData(prevState => ({
+                    ...prevState,
+                    pricetype: 'night'
+                }));
+            }
         }
 
         if(e.target.id === 'parking' || e.target.id === "furnished" || e.target.id === "offer"){
@@ -105,18 +121,30 @@ const UpdateListing = () => {
                 [e.target.id]: e.target.checked
             })
         }
-        
-        if(e.target.type === 'number' || e.target.type === 'text'){
+
+        if(e.target.id !== 'description' && (e.target.type === 'number' || e.target.type === 'text')){
             setformData({
                 ...formData,
                 [e.target.id]: e.target.value
             })
         }
-
+        if(e.target.id === 'description'){
+            setformData({
+                ...formData,
+                [e.target.id]: e.target.value
+            })
+        }
+        console.log(formData)
     }
 
     const handleSubmit = async(e) => {
         e.preventDefault()
+        //const formattedDescription = formData.description.replace(/(\r\n|\n|\r)/gm, '(_)');
+        setformData({
+            ...formData,
+            description: formData.description
+        })
+
         try {
             if(formData.imageUrls.length < 1 ){
                 seterror("you must upload at least one image")
@@ -186,7 +214,7 @@ const UpdateListing = () => {
                 </div>
                 <div className='flex flex-col'>
                     <label className='font-semibold text-lg'>Description</label>
-                    <input value={formData.description} onChange={handleChange} type='text' required minLength='10' maxLength="62" id='description' placeholder='Description' className='bg-slate-300  border p-3 rounded-lg'/>
+                    <textarea value={formData.description} onChange={handleChange} type='text' required minLength='10' id='description' placeholder='Description' className='bg-slate-300  border p-3 rounded-lg'/>
                 </div>
                 
                 <div className='flex gap-3'>

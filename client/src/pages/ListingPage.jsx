@@ -37,7 +37,7 @@ const ListingPage = () => {
         }
         fetchListing()
     }, [params.listingID])
-    
+
     console.log(listing)
 
     return (
@@ -56,7 +56,7 @@ const ListingPage = () => {
                             </div>
                             <h1>{listing.address}</h1>
                         </div>
-                        <h1 className='text-3xl'>${listing.regularPrice}/month</h1>
+                        <h1 className='text-3xl'>${listing.regularPrice}{listing.pricetype === "" ? "" : `/${listing.pricetype}`}</h1>
                     </div>
                 </div>
             </div>
@@ -77,11 +77,9 @@ const ListingPage = () => {
             <div className='w-1/2 relative h-full flex items-center justify-start'>
                 <div className='w-[80%] bg-white relative rounded-xl h-[90%] flex'>
                     {currentUser._id === listing.userRef && (
-                        <div className='absolute top-5 right-5'>
-                            <Link to={`/update-listing/${listing._id}`} className='w-5 h-5'>
-                                <img className='w-full h-full object-contain' src='/editicon.png'/>
-                            </Link>
-                        </div>
+                        <Link to={`/update-listing/${listing._id}`} className='absolute z-10 top-5 right-5'>
+                            <img className='w-full h-full object-contain' src='/editicon.png'/>
+                        </Link>
                     )}
                     <Contact listing={listing}/>
                 </div>

@@ -77,12 +77,29 @@ const CreateListing = () => {
     }
 
     const handleChange = (e) => {
-        if(e.target.id === 'sale' || e.target.id === 'rent'){
+        if(e.target.id === 'sale' || e.target.id === 'rent' || e.target.id === 'hotel'){
             setformData({
                 ...formData,
                 type:e.target.id
             })
+            if (e.target.id === 'sale') {
+                setformData(prevState => ({
+                    ...prevState,
+                    pricetype: ''
+                }));
+            } else if (e.target.id === 'rent') {
+                setformData(prevState => ({
+                    ...prevState,
+                    pricetype: 'month'
+                }));
+            } else if (e.target.id === 'hotel') {
+                setformData(prevState => ({
+                    ...prevState,
+                    pricetype: 'night'
+                }));
+            }
         }
+        
 
         if(e.target.id === 'parking' || e.target.id === "furnished" || e.target.id === "offer"){
             setformData({
@@ -91,13 +108,22 @@ const CreateListing = () => {
             })
         }
         
+        if (e.target.id === 'description') {
+            setformData({
+                ...formData,
+                description: e.target.value
+            });
+        }
+
         if(e.target.type === 'number' || e.target.type === 'text'){
             setformData({
                 ...formData,
                 [e.target.id]: e.target.value
             })
         }
-
+        
+        
+        console.log(formData)
     }
 
     const handleSubmit = async(e) => {
@@ -150,7 +176,7 @@ const CreateListing = () => {
                 </div>
                 <div className='flex flex-col'>
                     <label className='font-semibold text-lg'>Description</label>
-                    <input value={formData.description} onChange={handleChange} type='text' required minLength='10' maxLength="62" id='description' placeholder='Description' className='bg-slate-300  border p-3 rounded-lg'/>
+                    <textarea value={formData.description} onChange={handleChange} type='text' required minLength='10' id='description' placeholder='Description' className='bg-slate-300  border p-3 rounded-lg'/>
                 </div>
                 
                 <div className='flex gap-3'>
@@ -161,6 +187,10 @@ const CreateListing = () => {
                     <div className='flex gap-2'>
                         <input checked={formData.type === 'rent'} onChange={handleChange} type='checkbox' id='rent' className='w-5'/>
                         <span>Rent</span>
+                    </div>
+                    <div className='flex gap-2'>
+                        <input checked={formData.type === 'hotel'} onChange={handleChange} type='checkbox' id='hotel' className='w-5'/>
+                        <span>Hotel</span>
                     </div>
                     <div className='flex gap-2'>
                         <input checked={formData.parking} onChange={handleChange} type='checkbox' id='parking' className='w-5'/>
@@ -177,18 +207,18 @@ const CreateListing = () => {
                 </div>
                 <div className='flex gap-2 flex-wrap'>
                     <div className='flex gap-2 items-center'>
-                        <input value={formData.bedrooms} onChange={handleChange} className='bg-slate-300 rounded-lg border-gray-300 p-3 border' type='number' id='bedrooms' defaultValue='1' min='1' max='10' required/>
+                        <input value={formData.bedrooms} onChange={handleChange} className='bg-slate-300 rounded-lg border-gray-300 p-3 border' type='number' id='bedrooms' defaultValue='1' min='1' required/>
                         <span>Beds</span>
                     </div>
                     <div className='flex gap-2 items-center'>
-                        <input value={formData.bathrooms} onChange={handleChange} className='bg-slate-300 rounded-lg border-gray-300 p-3 border' type='number' id='bathrooms' min='1' max='10' required/>
+                        <input value={formData.bathrooms} onChange={handleChange} className='bg-slate-300 rounded-lg border-gray-300 p-3 border' type='number' id='bathrooms' min='1'  required/>
                         <span>Baths</span>
                     </div>
                     <div className='flex gap-2 items-center'>
                         <input value={formData.regularPrice} onChange={handleChange} className='bg-slate-300 rounded-lg border-gray-300 p-3 border' type='number' id='regularPrice' defaultValue='1' min='1' required/>
                         <div className='flex flex-col'>
                             <span>Regular Price</span>
-                            <span className='text-sm'>($/Month)</span>
+                            <span className='text-sm'>${formData.pricetype === '' ? '' : `/${formData.pricetype}`}</span>
                         </div>
                     </div>
                     {formData.offer ? (
@@ -196,7 +226,7 @@ const CreateListing = () => {
                             <input value={formData.discountedPrice} onChange={handleChange} className='bg-slate-300 rounded-lg cborder-gray-300 p-3 border' type='number' id='discountedPrice' defaultValue='1' min='1' required/>
                             <div className='flex flex-col'>
                                 <span>Discounted Price</span>
-                                <span className='text-sm'>($/Month)</span>
+                                <span className='text-sm'>${formData.pricetype === '' ? '' : `/${formData.pricetype}`}</span>
                             </div>
                         </div>
                     ): ""}

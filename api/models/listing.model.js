@@ -42,6 +42,10 @@ const listingSchema = mongoose.Schema(
             type:String,
             required:true
         },
+        pricetype:{
+            type:String,
+            required:true
+        },
         offer:{
             type:Boolean,
             required:true
