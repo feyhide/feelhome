@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MapComponent from './MapComponent';
+import Calendar from './Calender';
 
 const Contact = ({Landlord, listing }) => {
     const [posttime, setPostTime] = useState('');
     const [fulldesc, setFulldesc] = useState([]);
     const [shortdesc, setShortdesc] = useState('');
     const [descActive, setDescActive] = useState(false);
+    const [viewBooking, setviewBooking] = useState(false);
 
     useEffect(() => {
         if (listing.createdAt) {
@@ -42,6 +44,7 @@ const Contact = ({Landlord, listing }) => {
         //console.log(listing.description)
     }, [listing.description]);
 
+
     return (
         <>
             {Landlord && (
@@ -72,11 +75,11 @@ const Contact = ({Landlord, listing }) => {
                             <p className='w-full text-center text-2xl'>For <span className='uppercase font-bold'>{listing.type}</span></p>
                         </div>
                         <div className='flex flex-col gap-1'>
-                            <div>
-                                <p className='font-semibold text-2xl w-full'>Description:</p>
+                            <div className=''>
+                            <p className='font-semibold text-2xl w-full'>Description:</p>
                                 <div onClick={() => setDescActive(true)} className='hover:text-slate-500 flex flex-col transition-all ease w-full'>
-                                    {shortdesc.map((text,index)=>(
-                                        <p key={index}>{text}</p>
+                                    {shortdesc.slice(0, 3).map((text, index) => (
+                                        <p className='line-clamp-1' key={index}>{text}</p>
                                     ))}
                                 </div>
                             </div>
@@ -102,8 +105,6 @@ const Contact = ({Landlord, listing }) => {
                                     <p className=''>Furnished</p>
                                 </div>
                             )}
-                        </div>
-                        <div className='w-full flex gap-2 flex-col'>
                             <div className='flex gap-1 items-center'>
                                 <div className='w-5 h-full flex items-center relative'>
                                     <img className='w-full h-full object-contain' src='/bedroomicon.png' alt='Bedroom Icon' />
@@ -116,11 +117,23 @@ const Contact = ({Landlord, listing }) => {
                                 </div>
                                 <p className=''>{listing.bathrooms} bathrooms</p>
                             </div>
+                        </div>
+                        <div className='w-full flex gap-2 flex-col'>
                             <div className='flex gap-1'>
                                 <p>Posted on</p>
                                 <p>{posttime}</p>
                             </div>
                         </div>
+                        {listing.type === 'hotel' && (
+                            <div className='relative w-full'>
+                                <h1 className='h-[20px]' onClick={()=>setviewBooking(!viewBooking)}>{viewBooking ? "Close Bookings" : 'View Bookings'}</h1>
+                                {viewBooking && (
+                                    <div className='mt-[20px] absolute z-10 w-full top-0'>
+                                        <Calendar bookingDates={listing.bookingDates}/>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                     <div className='w-full bg-green-200 relative h-[40%] z-0'>
                         <MapComponent location={listing.address} />

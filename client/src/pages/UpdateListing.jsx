@@ -3,8 +3,13 @@ import { app } from '../firebase';
 import { getDownloadURL,ref, getStorage, uploadBytesResumable } from 'firebase/storage';
 import { useSelector } from 'react-redux';
 import { useNavigate,useParams} from 'react-router-dom';
+import SetCalender from './SetCalender';
+import { format } from 'date-fns';
 
 const UpdateListing = () => {
+    const [selectBooking,setselectBooking] = useState(false)
+    const [bookedDates, setBookedDates] = useState([]);
+    
     const params = useParams()
     const [files,setFiles] = useState([])
     const [imageUploadError,setimageUploadError] = useState(false)
@@ -15,6 +20,7 @@ const UpdateListing = () => {
         address:'',
         type:'rent',
         bedrooms:1,
+        bookingDates: [],
         bathrooms:1,
         regularPrice:0,
         discountedPrice:0,
@@ -27,6 +33,15 @@ const UpdateListing = () => {
     const [error,seterror] = useState(null)
     const navigate = useNavigate()
 
+    const addBookingDate = (startDate, endDate) => {
+        setBookedDates([...bookedDates, { startDate, endDate }]);
+    };
+    const removeBookDate = (date) => {
+        let newBookingDates = [...bookedDates]
+        newBookingDates = newBookingDates.filter(dates=> dates != date)
+        setBookedDates(newBookingDates)
+    };
+    
     useEffect(()=>{
         const fetchListing = async () => {
             const listingId = params.listingID
@@ -41,6 +56,13 @@ const UpdateListing = () => {
         }
     fetchListing()
     },[])
+
+    useEffect(()=>{
+        setformData({
+            ...formData,
+            bookingDates: bookedDates
+        })
+    },[bookedDates])
 
     const handleImage = (e) => {
         if(files.length > 0 && files.length + formData.imageUrls.length < 7){
@@ -140,6 +162,10 @@ const UpdateListing = () => {
     const handleSubmit = async(e) => {
         e.preventDefault()
         //const formattedDescription = formData.description.replace(/(\r\n|\n|\r)/gm, '(_)');
+        if(formData.type !== 'hotel'){
+            formData.bookingDates = []
+        }
+
         setformData({
             ...formData,
             description: formData.description
@@ -219,6 +245,10 @@ const UpdateListing = () => {
                 
                 <div className='flex gap-3'>
                     <div className='flex gap-1 flex-wrap'>
+                        <input checked={formData.type === "hotel"} onChange={handleChange} type='checkbox' id='hotel' className='w-5'/>
+                        <span>Hotel</span>
+                    </div>
+                    <div className='flex gap-1 flex-wrap'>
                         <input checked={formData.type === "sale"} onChange={handleChange} type='checkbox' id='sale' className='w-5'/>
                         <span>Sell</span>
                     </div>
@@ -265,6 +295,23 @@ const UpdateListing = () => {
                         </div>
                     ): ""}
                 </div>
+                {formData.type === 'hotel' && (
+                    <div className='flex gap-2 flex-col'>
+                        <label className='font-semibold'>Add Booked Dates</label>
+                        <p className='text-2xl font-sub font-semibold lowercase' onClick={()=>setselectBooking(!selectBooking)}>{selectBooking ? "x" : "+"}</p>
+                        <div>
+                            {formData.bookingDates.map((date, index) => (
+                            <div className='flex gap-2 items-center'>
+                            <div key={index} className='flex gap-2 items-center'>
+                                <p onClick={()=>removeBookDate(date)} className='text-2xl font-semibold'>x</p>
+                                <div>{format(date.startDate, 'dd/MM/yyyy')} - {format(date.endDate, 'dd/MM/yyyy')}</div>
+                            </div>
+                            </div>
+                            ))}
+                        </div>
+                        {selectBooking && <SetCalender onAddBookingDate={addBookingDate}/>}
+                    </div>
+                )}
             </div>
             <div className='flex items-center justify-center flex-col gap-3 flex-1'>
                 <p className='font-semibold text-lg'>Images:<span className='px-2 font-normal text-gray-700'>the first image will be the cover (max 6)</span></p>

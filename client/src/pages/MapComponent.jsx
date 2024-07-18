@@ -22,12 +22,11 @@ const MapComponent = ({ location, listings }) => {
         });
     };
 
-    // Determine zoom level based on props
     const getZoomLevel = () => {
         if (listings && listings.length > 0) {
-            return 2; // Zoom level when listings are present
+            return 2;
         } else {
-            return 11; // Default zoom level or when location is present
+            return 11;
         }
     };
 
@@ -75,15 +74,12 @@ const MapComponent = ({ location, listings }) => {
                 }
                 setMarkers(newMarkers);
 
-                // Adjust map view to fit all markers
                 if (mapRef.current && newMarkers.length > 0) {
                     const bounds = newMarkers.reduce((acc, marker) => {
-                        return [
-                            ...acc,
-                            marker.geoCode
-                        ];
-                    }, []);
-                    mapRef.current.fitBounds(bounds,{ maxZoom: 4 });
+                        return acc.extend(marker.geoCode);
+                    }, new window.L.LatLngBounds());
+    
+                    mapRef.current.fitBounds(bounds.pad(0.5));
                 }
             }
         };

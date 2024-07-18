@@ -10,8 +10,11 @@ export default {
         main:['League Spartan','sans-sarif'],
         sub:['Montserrat','sans-sarif'],
         sub2:['Libre Baskerville','sans-sarif']
-      }
+      },
+      lineClamp: {
+        2: '2',
+      },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/line-clamp')],
 }

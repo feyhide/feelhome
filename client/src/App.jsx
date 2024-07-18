@@ -12,6 +12,7 @@ import CreateListing from './pages/CreateListing'
 import UpdateListing from './pages/UpdateListing'
 import ListingPage from './pages/ListingPage'
 import Search from './pages/Search'
+import Calender from './pages/Calender'
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/signout' element={<SignOut/>}/>
         <Route path='/search' element={<Search/>}/>
+        <Route path='/calender' element={<Calender/>}/>
         <Route element={<PrivateRoute/>}>
           <Route path='/profile/:profileID' element={<Profile/>}/>
           <Route path='/create-listing' element={<CreateListing/>}/>

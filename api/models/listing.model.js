@@ -46,6 +46,10 @@ const listingSchema = mongoose.Schema(
             type:String,
             required:true
         },
+        bookingDates: [{
+            startDate: { type: Date, required: true },
+            endDate: { type: Date, required: true }
+        }],
         offer:{
             type:Boolean,
             required:true

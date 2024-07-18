@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/line-clamp": "^0.4.4",
     "axios": "^1.7.2",
+    "date-fns": "^3.6.0",
     "firebase": "^10.12.3",
     "firebase-admin": "^12.2.0",
     "leaflet": "^1.9.4",
