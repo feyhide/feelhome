@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import listing from '../../../api/models/listing.model';
 
 const ListingBoxProfile = ({ id }) => {
   const [userlisting, setUserListing] = useState([]);

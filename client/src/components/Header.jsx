@@ -62,8 +62,7 @@ const Header = () => {
         </ul>
       </div>
       {signIn || signUp ? (
-        <div className='w-screen h-screen flex items-center justify-center'>
-
+        <div className='w-screen fixed top-0 z-50 h-screen flex items-center justify-center bg-white bg-opacity-50 backdrop-blur-sm'>
         <div className='w-[500px] relative h-[500px] flex-col justify-center gap-2 items-center flex bg-white rounded-xl'>
           <div onClick={()=>{setsignIn(false),setsignUp(false)}} className='absolute top-5 left-5 w-10 h-10'>
             <img src='/arrowback.png' alt='Back' />

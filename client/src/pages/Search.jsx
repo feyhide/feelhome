@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ListingItem from './ListingItem'
+import ListingBox from '../components/ListingBox'
+import MapComponent from './MapComponent'
 
 const Search = () => {
     const navigate = useNavigate()
@@ -10,9 +12,6 @@ const Search = () => {
     const [sidebarData,setsidebarData] = useState({
         searchTerm:'',
         type:'all',
-        parking:false,
-        furnished:false,
-        offer:false,
         sort:"created_at",
         order:"desc"
     })
@@ -21,28 +20,18 @@ const Search = () => {
         const urlParams = new URLSearchParams(location.search)
         const searchTermFromUrl = urlParams.get("searchTerm")
         const typeFromUrl = urlParams.get("type")
-        const parkingFromUrl = urlParams.get("parking")
-        const furnishedFromUrl = urlParams.get("furnished")
-        const offerFromUrl = urlParams.get("offer")
         const sortFromUrl = urlParams.get("sort")
         const orderFromUrl = urlParams.get("order")
 
         if(
             searchTermFromUrl,
             typeFromUrl,
-            parkingFromUrl,
-            furnishedFromUrl,
-            offerFromUrl,
             sortFromUrl,
             orderFromUrl
         ){
             setsidebarData({
                 searchTerm: searchTermFromUrl || '',
                 type: typeFromUrl || 'all',
-                parking: parkingFromUrl === 'true' ? true : false,
-                furnished: furnishedFromUrl === 'true' ? true : false,
-                parking: parkingFromUrl === 'true' ? true : false,
-                offer: offerFromUrl === 'true' ? true : false,
                 sort: sortFromUrl || 'created_at',
                 order: orderFromUrl || 'desc'
             })
@@ -62,15 +51,13 @@ const Search = () => {
     
     console.log(listing)
     console.log(sidebarData)
+
     const handleChange = (e) => {
-        if(e.target.id === 'all' || e.target.id === 'rent' || e.target.id === 'sale'){
+        if(e.target.id === 'all' || e.target.id === 'hotel' || e.target.id === 'rent' || e.target.id === 'sale'){
             setsidebarData({...sidebarData,type:e.target.id})
         }
         if(e.target.id === 'searchTerm'){
             setsidebarData({...sidebarData,searchTerm:e.target.value})
-        }
-        if(e.target.id === 'offer' || e.target.id === 'parking' || e.target.id === 'furnished'){
-            setsidebarData({...sidebarData,[e.target.id]: e.target.checked || e.target.checked === 'true' ? true : false})
         }
         if(e.target.id === 'sort_order'){
             console.log("hee")
@@ -87,9 +74,6 @@ const Search = () => {
         const urlParams = new URLSearchParams()
         urlParams.set("searchTerm",sidebarData.searchTerm)
         urlParams.set("type",sidebarData.type)
-        urlParams.set("parking",sidebarData.parking)
-        urlParams.set("furnished",sidebarData.furnished)
-        urlParams.set("offer",sidebarData.offer)
         urlParams.set("sort",sidebarData.sort)
         urlParams.set("order",sidebarData.order)
         const searchQuery = urlParams.toString()
@@ -98,18 +82,22 @@ const Search = () => {
 
     
   return (
-    <div className='flex'>
-        <div>
-            <form onSubmit={handlesubmit}>
-                <div>
-                    <label>search term</label>
-                    <input value={sidebarData.searchTerm} onChange={handleChange} className='w-full border rounded-lg' type='text' id='searchTerm' placeholder='Search....' />
+    <div className='w-screen font-sub font-semibold tracking-[-1px] flex relative'>
+        <div className='w-[30%] mt-[80px] h-screen fixed top-0 bg-slate-300 bg-opacity-60'>
+            <form className='w-full h-1/2 gap-4 flex flex-col items-center p-20' onSubmit={handlesubmit}>
+                <div className='w-full flex flex-col'>
+                    <label>Search:</label>
+                    <input value={sidebarData.searchTerm} onChange={handleChange} className='w-full p-2 border rounded-lg' type='text' id='searchTerm' placeholder='Search... (Particular or City or Country)' />
                 </div>
-                <div className='flex flex-wrap gap-3'>
-                    <label>type:</label>
+                <div className='flex flex-wrap gap-3 justify-center w-full'>
+                    <label>Type:</label>
                     <div>
                         <input checked={sidebarData.type === 'all'} onChange={handleChange} type='checkbox' id='all'/>
-                        <span>Rent & Sale</span>
+                        <span>All</span>
+                    </div>
+                    <div>
+                        <input checked={sidebarData.type === 'hotel'} onChange={handleChange}  type='checkbox' id='hotel'/>
+                        <span>Hotel</span>
                     </div>
                     <div>
                         <input checked={sidebarData.type === 'rent'} onChange={handleChange}  type='checkbox' id='rent'/>
@@ -119,42 +107,33 @@ const Search = () => {
                         <input checked={sidebarData.type === 'sale'} onChange={handleChange}  type='checkbox' id='sale'/>
                         <span>Sale</span>
                     </div>
-                    <div>
-                        <input checked={sidebarData.offer} onChange={handleChange}  type='checkbox' id='offer'/>
-                        <span>Offer</span>
-                    </div>
-                </div>
-                <div className='flex flex-wrap gap-3'>
-                    <label>Amenities:</label>
-                    <div>
-                        <input checked={sidebarData.parking} onChange={handleChange}  type='checkbox' id='parking'/>
-                        <span>Parking</span>
-                    </div>
-                    <div>
-                        <input checked={sidebarData.furnished} onChange={handleChange}  type='checkbox' id='furnished'/>
-                        <span>Furnished</span>
-                    </div>
                 </div>
                 <div className='flex items-center gap-2'>
-                    <label>sort:</label>
-                    <select onChange={handleChange} defaultValue='created_at_desc' id='sort_order'>
+                    <label>Sort:</label>
+                    <select className='rounded-lg p-1' onChange={handleChange} defaultValue='created_at_desc' id='sort_order'>
                         <option value='regularPrice_desc'>Price High to Low</option>
                         <option value='regularPrice_asc'>Price Low to High</option>
                         <option value='created_at_desc'>Latest</option>
                         <option value='created_at_asc'>Oldest</option>
                     </select>
                 </div>
-                <button type='submit'>Search</button>
+                <button className='w-full bg-white rounded-lg p-3' type='submit'>Search</button>
             </form>
+            <div className='w-full h-1/2 absolute bottom-0'>
+                <MapComponent listings={listing}/>
+            </div>
         </div>
-        <div>
-            <h1>Search Result</h1>
-            <div>
-                {!loading && listing.length === 0 && (
-                    <p>No Matches Found</p>
-                )}
-                {!loading && listing && listing.map((item) => 
-                    <ListingItem key={item._id} item={item}/>
+        <div className='w-[70%] absolute flex flex-col gap-4 p-10 top-0 right-0 mt-[80px]'>
+            <h1 className='text-4xl tracking-[-2px]'>Results</h1>
+            {!loading && listing.length === 0 && (
+                <p>No Matches Found</p>
+            )}
+            {loading && (
+                <p>Loading...</p>
+            )}
+            <div className='flex flex-wrap gap-4'>
+                {!loading && listing && (
+                    <ListingBox data={listing}/>
                 )}
             </div>
         </div>
@@ -163,3 +142,12 @@ const Search = () => {
 }
 
 export default Search
+
+// <div>
+//                 {!loading && listing.length === 0 && (
+//                     <p>No Matches Found</p>
+//                 )}
+//                 {!loading && listing && listing.map((item) => 
+//                     <ListingItem key={item._id} item={item}/>
+//                 )}
+//             </div>

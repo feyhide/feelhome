@@ -7,7 +7,9 @@ export default {
   theme: {
     extend: {
       fontFamily:{
-        main:['League Spartan','sans-sarif']
+        main:['League Spartan','sans-sarif'],
+        sub:['Montserrat','sans-sarif'],
+        sub2:['Libre Baskerville','sans-sarif']
       }
     },
   },
