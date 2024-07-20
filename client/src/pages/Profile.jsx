@@ -221,7 +221,7 @@ const Profile = () => {
             </div>
             <div className='w-full h-1/2 relative flex justify-center items-center'>
               <div className='bg-red-600 w-[100px] rounded-full h-[100px] overflow-hidden'>
-                <img src={currentProfile.avatar}/>
+                <img className='w-full h-full object-cover' src={currentProfile.avatar}/>
               </div>
             </div>
             <div className='text-xl w-full flex-col h-1/2 relative flex justify-start items-center'>

@@ -9,6 +9,7 @@ const Search = () => {
     const [loading,setloading] = useState(false)
     const [listing,setlisting] = useState([])
     const [searcherror,setsearcherror] = useState(null)
+    const [particularlocation,setparticularlocation] = useState(null);
 
     const [sidebarData,setsidebarData] = useState({
         searchTerm:'',
@@ -48,6 +49,29 @@ const Search = () => {
                 if(data.success === false){
                     setsearcherror(error)
                     return
+                }
+                if (data.length > 0) {
+                    const firstAddressParts = data[0].address.toLowerCase().split(/[\/,]/).map(addr => addr.trim());
+                    console.log("First Address Parts:", firstAddressParts);
+                    let check = true
+        
+                    const allSameAddress = data.forEach(listing => {
+                        const listingAddressParts = listing.address.toLowerCase().split(/[\/,]/).map(addr => addr.trim());
+                        for (let i = 0; i < firstAddressParts.length; i++) {
+                            if(listingAddressParts[i] !== firstAddressParts[i]){
+                                check = false
+                                break
+                            }
+                            console.log("pass")
+                        }
+                        
+                    });
+                    if(check){
+                        setparticularlocation(firstAddressParts.join(','))
+                        console.log(firstAddressParts.join(','))
+                    }else{
+                        setparticularlocation(null)
+                    }
                 }
                 setlisting(data)
                 setloading(false)
@@ -130,13 +154,17 @@ const Search = () => {
                 <button className='w-full bg-white rounded-lg p-3' type='submit'>Search</button>
             </form>
             <div className='w-full h-1/2 absolute bottom-0'>
-                <MapComponent listings={listing}/>
+                {particularlocation ? (<MapComponent location={particularlocation}/>) : (<MapComponent listings={listing}/>)}
             </div>
         </div>
         <div className='w-[70%] absolute flex flex-col gap-4 p-10 top-0 right-0 mt-[80px]'>
             <h1 className='text-4xl tracking-[-2px]'>Results</h1>
             {!loading && !searcherror &&  listing.length === 0 && (
+                <>
                 <p>No Matches Found</p>
+                <p>try searching for another place or change the type</p>
+                </>
+
             )}
             {!loading && searcherror && (
                 <>

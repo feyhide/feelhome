@@ -63,7 +63,7 @@ const ListingBox = ({ data,id }) => {
           </Link>
         ))
       ) : (
-        <h1 className='font-main text-xl tracking-[-1px]'>{params.listingID ? 'No more listing available' : "Unable to get Listing"}</h1>
+        <h1 className='font-main text-xl tracking-[-1px]'>{params.listingID ? 'No more listing available' : ""}</h1>
       )}
     </>
   );

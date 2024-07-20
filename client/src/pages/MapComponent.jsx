@@ -7,10 +7,11 @@ import axios from 'axios';
 
 const MapComponent = ({ location, listings }) => {
     const mapRef = useRef();
-    const [radius,setradius] = useState(0)
+    const boundsRef = useRef(new window.L.LatLngBounds());
+    const [radius, setRadius] = useState(0);
     const [geoCode, setGeoCode] = useState([24.860966, 66.990501]);
     const [markers, setMarkers] = useState([]);
-    const [loading,setloading] = useState(null)
+    const [loading, setLoading] = useState(false);
 
     const customIcon = new Icon({
         iconUrl: "/markericon.png",
@@ -19,7 +20,7 @@ const MapComponent = ({ location, listings }) => {
 
     const createCustomClusterIcon = (cluster) => {
         return new divIcon({
-            html: `<div className="">${cluster.getChildCount()}</div>`,
+            html: `<div class="font-sub font-bold rounded-full flex items-center justify-center w-8 h-8">${cluster.getChildCount()}</div>`,
             iconSize: [33, 33]
         });
     };
@@ -33,41 +34,39 @@ const MapComponent = ({ location, listings }) => {
     };
 
     useEffect(() => {
-        const fetchData = async () => {
-            setloading(true)
+        const fetchLocationData = async () => {
+            setLoading(true);
             try {
                 if (location) {
-                    setradius(3000)
+                    console.log("location: ", location);
+                    setRadius(3000);
                     const response = await axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${location}&limit=1`);
                     if (response.data && response.data.length > 0) {
                         const { lat, lon } = response.data[0];
                         const newGeoCode = [parseFloat(lat), parseFloat(lon)];
                         setGeoCode(newGeoCode);
-                        
+
                         if (mapRef.current) {
                             mapRef.current.setView(newGeoCode, 11);
                         }
+                    } else {
+                        console.log(response.data.message);
                     }
-                    setloading(false)
                 }
             } catch (error) {
-                setloading(false)
                 console.error('Error fetching location:', error);
             }
+            setLoading(false);
         };
 
-        setloading(false)
-        fetchData();
+        fetchLocationData();
     }, [location]);
 
     useEffect(() => {
-        
         const fetchListingsData = async () => {
-            setloading(true)
-            if (listings && listings.length > 1) {
-
-                setradius(0)
-                const newMarkers = [];
+            setLoading(true);
+            if (listings && listings.length > 0) {
+                setRadius(0);
                 for (const listing of listings) {
                     try {
                         const response = await axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${listing.address}&limit=1`);
@@ -77,26 +76,22 @@ const MapComponent = ({ location, listings }) => {
                                 geoCode: [parseFloat(lat), parseFloat(lon)],
                                 popUp: listing.name
                             };
-                            newMarkers.push(newMarker);
+                            setMarkers(prevMarkers => [...prevMarkers, newMarker]);
+
+                            if (mapRef.current) {
+                                boundsRef.current.extend([lat, lon]);
+                                mapRef.current.fitBounds(boundsRef.current.pad(0.5));
+                            }
                         }
+                        setLoading(false);
                     } catch (error) {
+                        setLoading(false);
                         console.error(`Error fetching coordinates for ${listing.address}:`, error);
                     }
                 }
-                setMarkers(newMarkers);
-
-                if (mapRef.current && newMarkers.length > 0) {
-                    const bounds = newMarkers.reduce((acc, marker) => {
-                        return acc.extend(marker.geoCode);
-                    }, new window.L.LatLngBounds());
-    
-                    mapRef.current.fitBounds(bounds.pad(10.5));
-                }
-                setloading(false)
             }
         };
 
-        setloading(false)
         fetchListingsData();
     }, [listings]);
 
@@ -110,6 +105,7 @@ const MapComponent = ({ location, listings }) => {
                 <MarkerClusterGroup
                     chunkedLoading
                     iconCreateFunction={createCustomClusterIcon}
+                    className=""
                 >
                     {markers.map((marker, index) => (
                         <Marker key={index} position={marker.geoCode} icon={customIcon}>

@@ -1,6 +1,3 @@
-maploading,listingloading,
-if user not signin what to show,
-map cluster,
-profile image,
+if user not signin what to show, 
 redux for profile,
 redux for listings on home page to check whether the listing in database change or not

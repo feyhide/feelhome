@@ -68,11 +68,8 @@ const ListingPage = () => {
             }
         }
         fetchlocationListing()
-        console.log("from fetch",city)
     },[listing,city])
     
-    console.log("not from fetch",city)
-
     useEffect(()=>{
         const fetchLandLord = async () => {
             try {
