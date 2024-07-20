@@ -75,7 +75,7 @@ const Home = () => {
         </div>
       </form>
     </div>
-    <div className='w-screen h-[150vh] flex'>
+    <div className='w-screen p-10 bg-white flex'>
       <MainPageListing/>
     </div>
     </>

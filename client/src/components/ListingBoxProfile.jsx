@@ -56,7 +56,7 @@ const ListingBoxProfile = ({ id }) => {
                 {hasRent && (
                     <div className='w-full flex flex-col font-main font-bold tracking-[-1.5px]'>
                         <h1 className='w-full text-center p-5 text-3xl'>For Rent</h1>
-                        <div className='w-full flex gap-4 items-center justify-center'>
+                        <div className='w-full flex-wrap flex gap-4 items-center justify-center'>
                             {userlisting
                                 .filter(listing => listing.type === 'rent')
                                 .map(listing => (
@@ -79,7 +79,7 @@ const ListingBoxProfile = ({ id }) => {
                 {hasSale && (
                     <div className='w-full flex flex-col font-main font-bold tracking-[-1.5px]'>
                         <h1 className='w-full text-center p-5 text-3xl'>For Sale</h1>
-                        <div className='w-full flex gap-4 items-center justify-center'>
+                        <div className='w-full flex gap-4 flex-wrap items-center justify-center'>
                             {userlisting
                                 .filter(listing => listing.type === 'sale')
                                 .map(listing => (
@@ -102,7 +102,7 @@ const ListingBoxProfile = ({ id }) => {
                 {hasHotel && (
                     <div className='w-full flex flex-col font-main font-bold tracking-[-1.5px]'>
                         <h1 className='w-full text-center p-5 text-3xl'>For Hotel</h1>
-                        <div className='w-full flex gap-4 items-center justify-center'>
+                        <div className='w-full flex gap-4 flex-wrap items-center justify-center'>
                             {userlisting
                                 .filter(listing => listing.type === 'hotel')
                                 .map(listing => (

@@ -12,6 +12,7 @@ const Profile = () => {
     const params = useParams()
     const dispatch = useDispatch()
     const [update,setupdate] = useState(false)
+    const [userLoaderror,setuserLoaderror] = useState(null)
     const {loading,error,currentUser} = useSelector((state)=> state.user)
     const [userlisting,setuserlisting] = useState({})
     const imageRef = useRef(null)
@@ -145,10 +146,12 @@ const Profile = () => {
               const data = await res.json()
               if(data.success === false){
                   checkNoUser()
+                  setuserLoaderror(data.success)
                   return 
               }
               setcurrentProfile(data)
           } catch (error) {
+              setuserLoaderror(error)
               console.log(error)
           }
       }
@@ -209,7 +212,9 @@ const Profile = () => {
             </div>
           )
         }
-        <div className='w-screen relative gap-4 font-main h-1/2 mt-[100px] items-center justify-center flex-col flex'>
+        {!userLoaderror && (
+          <>
+          <div className='w-screen relative gap-4 font-main h-1/2 mt-[100px] items-center justify-center flex-col flex'>
           <div className='w-full bg-white h-1/4 p-10 my-10 flex flex-col gap-2'>
             <div className='font-main font-bold tracking-[-3px] text-5xl text-center flex items-center justify-center w-full h-1/6'>
               {currentUser._id === currentProfile._id ? "Your Profile" : ``}
@@ -241,6 +246,14 @@ const Profile = () => {
             <ListingBoxProfile id={params.profileID}/>
           </div>
         </div>
+        </>
+        )}
+        {userLoaderror && (
+          <div className='w-screen font-main h-screen flex items-center justify-center flex-col'>
+            <p className='text-5xl tracking-[-2px] font-bold'>Error Loading Profile</p>
+            <p className='text-2xl tracking-[-1px] font-semibold'>might be a server issue or this Profile does not exist try searching for another Profile</p>
+          </div>
+        )}
       </>
     )
 }

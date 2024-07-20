@@ -1,10 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { app } from '../firebase';
 import { getDownloadURL,ref, getStorage, uploadBytesResumable } from 'firebase/storage';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import SetCalender from './SetCalender';
+import { format } from 'date-fns';
 
-const CreateListing = () => {
+const CreateListing = () => { 
+    
+    const [selectBooking,setselectBooking] = useState(false)
+    const [bookedDates, setBookedDates] = useState([]);
     const [files,setFiles] = useState([])
     const [imageUploadError,setimageUploadError] = useState(false)
     const [formData,setformData] = useState({
@@ -12,7 +17,8 @@ const CreateListing = () => {
         name:'',
         description:'',
         address:'',
-        type:'rent',
+        type:'',
+        pricetype:"",
         bedrooms:1,
         bathrooms:1,
         regularPrice:0,
@@ -127,9 +133,19 @@ const CreateListing = () => {
         console.log(formData)
     }
 
+    useEffect(()=>{
+        setformData({
+            ...formData,
+            bookingDates: bookedDates
+        })
+    },[bookedDates])
+
     const handleSubmit = async(e) => {
         e.preventDefault()
         //const formattedDescription = formData.description.replace(/(\r\n|\n|\r)/gm, '(_)');
+        if(formData.type !== 'hotel'){
+            formData.bookingDates = []
+        }
         setformData({
             ...formData,
             description: formData.description
@@ -167,6 +183,14 @@ const CreateListing = () => {
             setloading(false)
         }
     }
+    const addBookingDate = (startDate, endDate) => {
+        setBookedDates([...bookedDates, { startDate, endDate }]);
+    };
+    const removeBookDate = (date) => {
+        let newBookingDates = [...bookedDates]
+        newBookingDates = newBookingDates.filter(dates=> dates != date)
+        setBookedDates(newBookingDates)
+    };
     return (
         <main className='p-3 w-screen flex flex-col justify-center items-center font-main tracking-[-1px] mx-auto mt-[100px]'>
         <h1 className='text-5xl font-bold text-center tracking-[-2px] mt-10 mb-3'>Create Listing</h1>
@@ -237,6 +261,23 @@ const CreateListing = () => {
                         </div>
                     ): ""}
                 </div>
+                    {formData.type === 'hotel' && (
+                        <div className='flex gap-2 flex-col'>
+                            <label className='font-semibold'>Add Booked Dates</label>
+                            <p className='text-2xl font-sub font-semibold lowercase' onClick={()=>setselectBooking(!selectBooking)}>{selectBooking ? "x" : "+"}</p>
+                            <div>
+                                {formData.bookingDates.map((date, index) => (
+                                <div className='flex gap-2 items-center'>
+                                <div key={index} className='flex gap-2 items-center'>
+                                    <p onClick={()=>removeBookDate(date)} className='text-2xl font-semibold'>x</p>
+                                    <div>{format(date.startDate, 'dd/MM/yyyy')} - {format(date.endDate, 'dd/MM/yyyy')}</div>
+                                </div>
+                                </div>
+                                ))}
+                            </div>
+                            {selectBooking && <SetCalender onAddBookingDate={addBookingDate}/>}
+                        </div>
+                    )}
             </div>
             <div className='flex items-center justify-center flex-col gap-3 flex-1'>
                 <p className='font-semibold text-lg'>Images:<span className='px-2 font-normal text-gray-700'>the first image will be the cover (max 6)</span></p>

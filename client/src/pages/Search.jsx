@@ -8,6 +8,7 @@ const Search = () => {
     const navigate = useNavigate()
     const [loading,setloading] = useState(false)
     const [listing,setlisting] = useState([])
+    const [searcherror,setsearcherror] = useState(null)
 
     const [sidebarData,setsidebarData] = useState({
         searchTerm:'',
@@ -39,12 +40,21 @@ const Search = () => {
 
         const fetchListings = async () => {
             setloading(true)
-            const searchQuery = urlParams.toString()
-            console.log(`/api/v1/listing/get?${searchQuery}`)
-            const res = await fetch(`/api/v1/listing/get?${searchQuery}`)
-            const data = await res.json()
-            setlisting(data)
-            setloading(false)
+            try {
+                const searchQuery = urlParams.toString()
+                console.log(`/api/v1/listing/get?${searchQuery}`)
+                const res = await fetch(`/api/v1/listing/get?${searchQuery}`)
+                const data = await res.json()
+                if(data.success === false){
+                    setsearcherror(error)
+                    return
+                }
+                setlisting(data)
+                setloading(false)
+            } catch (error) {
+                setsearcherror(error)
+                setloading(false)
+            }
         }
         fetchListings()
     },[location.search])
@@ -125,8 +135,14 @@ const Search = () => {
         </div>
         <div className='w-[70%] absolute flex flex-col gap-4 p-10 top-0 right-0 mt-[80px]'>
             <h1 className='text-4xl tracking-[-2px]'>Results</h1>
-            {!loading && listing.length === 0 && (
+            {!loading && !searcherror &&  listing.length === 0 && (
                 <p>No Matches Found</p>
+            )}
+            {!loading && searcherror && (
+                <>
+                    <p>Error while loading data</p>
+                    <p>might be a server issue try again later</p>
+                </>
             )}
             {loading && (
                 <p>Loading...</p>

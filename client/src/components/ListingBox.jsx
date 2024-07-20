@@ -3,7 +3,6 @@ import { Link, useParams } from 'react-router-dom';
 
 const ListingBox = ({ data,id }) => {
   const [userlisting, setUserListing] = useState([]);
-  const [Landlord,setLandLord] = useState([])
 
   const params = useParams();
 
@@ -16,38 +15,27 @@ const ListingBox = ({ data,id }) => {
   
   if(id){
     useEffect(() => {
-      const fetchLandLord = async () => {
-          try {
-              const res = await fetch(`/api/v1/user/${listing.userRef}`)
+      if(id){
+        const handleShowListing = async() => {
+            try {
+              const res = await fetch(`/api/v1/user/listings/${id}`)
               const data = await res.json()
               if(data.success === false){
-                  return 
+                return
               }
-              setLandLord(data)
-          } catch (error) {
+              const filteredListings = data.filter(listing => listing._id !== params.listingID);
+              setUserListing(filteredListings)
+              console.log(data)
+            } catch (error) {
               console.log(error)
+            }
+            console.log(id)
           }
-      }
-      const handleShowListing = async() => {
-        try {
-          const res = await fetch(`/api/v1/user/listings/${id}`)
-          const data = await res.json()
-          if(data.success === false){
-            return
-          }
-          const filteredListings = data.filter(listing => listing._id !== params.listingID);
-          setUserListing(filteredListings)
-          console.log(data)
-        } catch (error) {
-          console.log(error)
+          handleShowListing();
         }
-        console.log(id)
-      }
-      fetchLandLord();
-      handleShowListing();
     }, [id,params.listingID]);
   }
-
+  
   if(data){
     useEffect(() => {
       if (data) {
@@ -56,7 +44,7 @@ const ListingBox = ({ data,id }) => {
     }, [data]);
   }
 
-  console.log(userlisting)
+  //console.log(userlisting)
   return (
     <>
       {userlisting.length > 0 ? (
@@ -75,7 +63,7 @@ const ListingBox = ({ data,id }) => {
           </Link>
         ))
       ) : (
-        <h1 className='font-main text-xl tracking-[-1px]'>{params.listingID ? `${Landlord.username} have no more listing` : "Error Loading Listing"}</h1>
+        <h1 className='font-main text-xl tracking-[-1px]'>{params.listingID ? 'No more listing available' : "Unable to get Listing"}</h1>
       )}
     </>
   );
