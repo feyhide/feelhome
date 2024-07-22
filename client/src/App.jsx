@@ -59,7 +59,6 @@ const App = () => {
         <Route path='/' element={<Home />} />
         <Route path='/signinrequest' element={<SignInRequest />} />
         <Route path='/signup' element={<Signup />} />
-        <Route path='/signout' element={<SignOut />} />
         <Route path='/search' element={<Search />} />
         <Route path='/calender' element={<Calender />} />
         <Route element={<PrivateRoute />}>
