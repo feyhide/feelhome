@@ -11,6 +11,7 @@ const Profile = () => {
     const [currentProfile,setcurrentProfile] = useState({})
     const params = useParams()
     const dispatch = useDispatch()
+    const [loadingprofile,setloadingprofile] = useState(false)
     const [update,setupdate] = useState(false)
     const [userLoaderror,setuserLoaderror] = useState(null)
     const {loading,error,currentUser} = useSelector((state)=> state.user)
@@ -143,6 +144,7 @@ const Profile = () => {
 
     useEffect(()=>{
       const fetchProfile = async () => {
+          setloadingprofile(true)
           try {
               const res = await fetch(`/api/v1/user/${params.profileID}`)
               const data = await res.json()
@@ -152,7 +154,10 @@ const Profile = () => {
                   return 
               }
               setcurrentProfile(data)
+              
+             setloadingprofile(false)
           } catch (error) {
+            setloadingprofile(false)
               setuserLoaderror(error)
               console.log(error)
           }
@@ -165,7 +170,7 @@ const Profile = () => {
     return (
         <>
         {
-          currentUser._id === currentProfile._id && update && (
+          !loadingprofile && currentUser._id === currentProfile._id && update && (
             <div className='w-screen h-screen z-30 flex gap-4 flex-col items-center justify-center bg-black bg-opacity-50 fixed top-0'>
               <div className='w-full md:w-1/2 h-[70%] md:h-[500px] flex flex-col items-center justify-center  bg-white rounded-xl relative'>
                   <div onClick={()=>{setupdate(false)}} className='absolute z-10 top-5 left-5 w-10 h-10'>
@@ -220,7 +225,7 @@ const Profile = () => {
             </div>
           )
         }
-        {!userLoaderror && (
+        {!loadingprofile && !userLoaderror && (
           <>
           <div className='w-screen relative gap-4 font-sub h-1/2 mt-[100px] items-center justify-center flex-col flex'>
           <div className='w-full bg-white h-1/4 p-10 my-10 flex flex-col gap-2'>
@@ -256,11 +261,16 @@ const Profile = () => {
         </div>
         </>
         )}
-        {userLoaderror && (
+        {!loadingprofile && userLoaderror && (
           <div className='w-screen font-sub h-screen flex items-center justify-center flex-col'>
             <p className='text-2xl md:text-5xl tracking-[-2px] font-bold'>Error Loading Profile</p>
             <p className='text-2xl tracking-[-1px] font-semibold'>might be a server issue or this Profile does not exist try searching for another Profile</p>
           </div>
+        )}
+        {loadingprofile && (
+            <div className='w-screen font-sub h-screen flex items-center justify-center flex-col'>
+                <p className='text-5xl tracking-[-2px] font-bold'>Loading Profile</p>
+            </div> 
         )}
       </>
     )

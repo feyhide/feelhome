@@ -90,7 +90,7 @@ const ListingPage = () => {
 
     return (
         <>
-        {!error && (<>
+        {!loading && !error && (<>
             <div className='w-screen h-[90vh] md:h-[90vh] mt-[80px] justify-center items-center flex'>
                 <div className='w-[80%] relative h-[70%] rounded-xl overflow-hidden'>
                     {!loading && listing && listing.imageUrls && (
@@ -163,11 +163,16 @@ const ListingPage = () => {
                 </Link>
             </div>
         </>)}
-        {error && (
+        {!loading && error && (
             <div className='w-screen font-sub h-screen flex items-center justify-center flex-col'>
                 <p className='text-5xl tracking-[-2px] font-bold'>Error Loading Listing</p>
                 <p className='text-2xl tracking-[-1px] font-semibold'>might be a server issue or this Listing does not exist try searching for another Listing</p>
             </div>    
+        )}
+        {loading && (
+            <div className='w-screen font-sub h-screen flex items-center justify-center flex-col'>
+                <p className='text-5xl tracking-[-2px] font-bold'>Loading Listing</p>
+            </div> 
         )}
         </>
     )
