@@ -18,6 +18,7 @@ const ListingBoxProfile = ({ id }) => {
     return desc
   }
   const handleShowListing = async() => {
+    setUserListing(null)
     try {
       const res = await fetch(`/api/v1/user/listings/${id}`)
       const data = await res.json()
@@ -42,6 +43,7 @@ const ListingBoxProfile = ({ id }) => {
 
   //console.log("id prop",id)
   useEffect(() => {
+    setcurrentlisting(null)
     if(params.listingID){
         setcurrentlisting(params.listingID)
     }
