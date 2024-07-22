@@ -135,7 +135,7 @@ const Profile = () => {
           return;
         }
         dispatch(signOutUserSuccess())
-        //navigate("/")
+        navigate("/")
       } catch (error) {
         dispatch(signOutFailure(error.message))
         console.log(error.message)

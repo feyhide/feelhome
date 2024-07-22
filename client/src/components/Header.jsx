@@ -43,10 +43,10 @@ const Header = () => {
           <input value={searchTerm} onChange={(e)=>setsearchTerm(e.target.value)} className='bg-transparent focus:outline-none w-24 sm:w-64' type='text' placeholder='search.....'/>
           <button type='submit'>Submit</button>
           </form> */}
-        <ul className='flex gap-4 font-main items-center'>
+        <ul className='flex gap-4 font-sub items-center'>
           {!currentUser ? (
             <Link onClick={()=>{setsignIn(!signIn),setsignUp(false)}}>
-              <li className='hidden tracking-tight sm:inline text-slate-500 text-[20px] transition-all ease hover:text-[22px] hover:underline hover:text-black'>sign in</li>
+              <li className='hidden tracking-[-1px] sm:inline text-slate-500 text-[20px] transition-all ease hover:text-[22px] hover:underline hover:text-black'>sign in</li>
             </Link>
           ) : (
             <Link to={`/profile/${currentUser._id}`}>
@@ -74,12 +74,12 @@ const Header = () => {
             </div>
           )}
           {signIn && (
-            <p onClick={()=>{setsignIn(false),setsignUp(true)}} className='font-main text-md tracking-tight'>
+            <p onClick={()=>{setsignIn(false),setsignUp(true)}} className='font-sub text-md tracking-[-1px]'>
               Don't have an account? <span className='text-blue-400 hover:underline'>Create One</span>
             </p>
           )}
           {signUp && (
-            <p onClick={()=>{setsignIn(true),setsignUp(false)}} className='font-main text-md tracking-tight'>
+            <p onClick={()=>{setsignIn(true),setsignUp(false)}} className='font-sub text-md tracking-[-1px]'>
               Already have an account ? <span className='text-blue-400 hover:underline'>Sign In</span>
             </p>
           )}

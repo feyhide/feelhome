@@ -42,11 +42,11 @@ const SignIn = () => {
     }
 
   return (
-    <div className='font-main w-full h-full flex flex-col items-center justify-center p-3'>
-      <h1 className='text-4xl text-center font-bold tracking-tighter my-7'>Sign In</h1>
+    <div className='font-sub font-semibold tracking-[-1.5px] w-full h-full flex flex-col items-center justify-center p-3'>
+      <h1 className='text-4xl text-center font-bold my-7'>Sign In</h1>
       <form onSubmit={handleSubmit} className='flex w-full flex-col gap-4 items-center'>
-        <input onChange={handleChange} type='text' placeholder='Email Address' className='border p-3 rounded-lg w-[70%] tracking-tight bg-slate-100 border-slate-200' id='email'/>
-        <input onChange={handleChange} type='password' placeholder='Password' className='border p-3 rounded-lg w-[70%] tracking-tight bg-slate-100 border-slate-200' id='password'/>
+        <input onChange={handleChange} type='text' placeholder='Email Address' className='border p-3 rounded-lg w-[70%] bg-slate-100 border-slate-200' id='email'/>
+        <input onChange={handleChange} type='password' placeholder='Password' className='border p-3 rounded-lg w-[70%] bg-slate-100 border-slate-200' id='password'/>
         <button disabled={loading} className='bg-slate-200 border border-white bg-opacity-60 backdrop-blur-xl h-10 transition-all ease text-black rounded-lg uppercase w-[70%] '>{loading ? 'Loading...':'Sign In'}</button>
         <OAuth/>
       </form>
