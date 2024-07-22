@@ -15,7 +15,7 @@ const MainPageListing = () => {
   const [rentpreview, setrentpreview] = useState({})
   const [location, setlocation] = useState([])
   const [error, seterror] = useState(null)
-
+  console.log(`${url}/api/v1/listing/get?type=hotel&limit=4`)
   useEffect(() => {
     const fetchHotelListing = async () => {
       try {
