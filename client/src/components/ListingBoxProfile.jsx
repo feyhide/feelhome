@@ -19,7 +19,7 @@ const ListingBoxProfile = ({ id }) => {
   }
   const handleShowListing = async() => {
     try {
-      const res = await fetch(`${url}/api/v1/user/listings/${id}`)
+      const res = await fetch(`/api/v1/user/listings/${id}`)
       const data = await res.json()
       if(data.success === false){
         return

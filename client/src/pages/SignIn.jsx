@@ -9,7 +9,7 @@ const SignIn = () => {
   const navigate = useNavigate()
 
     const [formData,setformData] = useState({})
-    const {loading,error,url} = useSelector((state)=>state.user)
+    const {loading,error} = useSelector((state)=>state.user)
     const handleChange = (e) => {
         setformData({
             ...formData,
@@ -20,7 +20,7 @@ const SignIn = () => {
        try {
         e.preventDefault()
         dispatch(signinStart())
-        const res = await fetch(`${url}/api/v1/auth/signin`,
+        const res = await fetch(`/api/v1/auth/signin`,
             {
                 method: "POST",
                 headers: {

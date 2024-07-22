@@ -8,7 +8,6 @@ import ListingBox from '../components/ListingBox'
 import ListingBoxProfile from '../components/ListingBoxProfile'
 
 const Profile = () => { 
-    const {url} = useSelector(state=>state.user)
     const [currentProfile,setcurrentProfile] = useState({})
     const params = useParams()
     const dispatch = useDispatch()
@@ -85,7 +84,7 @@ const Profile = () => {
       console.log("user updateding")
       try {
         dispatch(updateUserStart())
-        const res = await fetch(`${url}/api/v1/user/update/${currentUser._id}`,{
+        const res = await fetch(`/api/v1/user/update/${currentUser._id}`,{
           method: "POST",
           headers: {
             "Content-Type":'application/json'
@@ -109,7 +108,7 @@ const Profile = () => {
     const handleDeleteUser = async () => {
       try {
         dispatch(deleteUserStart())
-        const res = await fetch(`${url}/api/v1/user/delete/${currentUser._id}`,{
+        const res = await fetch(`/api/v1/user/delete/${currentUser._id}`,{
           method: "DELETE"
         })
         const data = await res.json()
@@ -127,7 +126,7 @@ const Profile = () => {
     const handleSignout = async () => {
       try {
         dispatch(signOutUserStart())
-        const res = await fetch(`${url}/api/v1/auth/signout`)
+        const res = await fetch(`/api/v1/auth/signout`)
         const data = await res.json();
         if(data.success === false){
           dispatch(signOutFailure(data.message))
@@ -145,7 +144,7 @@ const Profile = () => {
     useEffect(()=>{
       const fetchProfile = async () => {
           try {
-              const res = await fetch(`${url}/api/v1/user/${params.profileID}`)
+              const res = await fetch(`/api/v1/user/${params.profileID}`)
               const data = await res.json()
               if(data.success === false){
                   checkNoUser()

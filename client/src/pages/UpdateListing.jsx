@@ -28,7 +28,7 @@ const UpdateListing = () => {
         parking:false,
         furnished:false
     })
-    const {currentUser,url} = useSelector(state => state.user)
+    const {currentUser} = useSelector(state => state.user)
     const [loading,setloading] = useState(false)
     const [error,seterror] = useState(null)
     const navigate = useNavigate()
@@ -45,7 +45,7 @@ const UpdateListing = () => {
     useEffect(()=>{
         const fetchListing = async () => {
             const listingId = params.listingID
-            const res = await fetch(`${url}/api/v1/listing/get/${listingId}`)
+            const res = await fetch(`/api/v1/listing/get/${listingId}`)
             const data = await res.json();
             if(data.success === false){
                 console.log('error',data.message)
@@ -183,7 +183,7 @@ const UpdateListing = () => {
             setloading(true)
             seterror(null)
             const listingId = params.listingID
-            const res = await fetch(`${url}/api/v1/listing/update/${listingId}`,{
+            const res = await fetch(`/api/v1/listing/update/${listingId}`,{
                 method:"PATCH",
                 headers:{
                     'Content-Type':"application/json"
@@ -210,7 +210,7 @@ const UpdateListing = () => {
         
         const id = params.listingID
         try {
-          const res = await fetch(`${url}/api/v1/listing/delete/${id}`,{
+          const res = await fetch(`/api/v1/listing/delete/${id}`,{
             method:"DELETE",
           })
           const data = await res.json()
