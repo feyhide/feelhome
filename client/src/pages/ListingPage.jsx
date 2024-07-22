@@ -94,7 +94,7 @@ const ListingPage = () => {
             <div className='w-screen h-[90vh] md:h-[90vh] mt-[80px] justify-center items-center flex'>
                 <div className='w-[80%] relative h-[70%] rounded-xl overflow-hidden'>
                     {!loading && listing && listing.imageUrls && (
-                        <img className='w-full h-full object-cover' src={listing.imageUrls[1]}/>
+                        <img className='w-full h-full object-cover' src={listing.imageUrls[0]}/>
                     )}
                     <div className='absolute top-0 bg-gradient-to-tl from-black via-transparent to-transparent flex items-end w-full h-full '>
                         <div className='font-sub md:px-10 bg-gradient-to-tl from-black via-transparent to-transparent text-2xl md:text-4xl tracking-[-2px] w-full h-[50vh] text-white flex flex-col items-end justify-end pb-10 pr-5 md:pr-10'>
