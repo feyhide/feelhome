@@ -140,6 +140,7 @@ export const signin = async (req, res, next) => {
 
 // Google Signin endpoint
 export const google = async (req, res, next) => {
+    console.log('hello')
     const { name, email, photo } = req.body;
     console.log(req.body);
     try {
@@ -159,6 +160,7 @@ export const google = async (req, res, next) => {
             res.cookie('access_token', token, { httpOnly: true, expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) }).status(200).json(rest);
         }
     } catch (error) {
+        console.log(error)
         next(error);
     }
 };
