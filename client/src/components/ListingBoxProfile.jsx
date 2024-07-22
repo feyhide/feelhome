@@ -128,7 +128,7 @@ const ListingBoxProfile = ({ id }) => {
                 )}
             </>
         )}
-        {userlisting.length < 1 && (
+        {userlisting && userlisting.length < 1 && (
             <h1 className='font-sub text-xl tracking-[-1px]'>You currently have no listing</h1>
         )}
     </>
