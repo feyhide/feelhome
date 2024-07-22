@@ -1,36 +1,36 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import ListingItem from './ListingItem'
-import ListingBox from '../components/ListingBox'
-import MapComponent from './MapComponent'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import ListingItem from './ListingItem';
+import ListingBox from '../components/ListingBox';
+import MapComponent from './MapComponent';
+import { useSelector } from 'react-redux';
 
 const Search = () => {
-    const navigate = useNavigate()
-    const location = useLocation() // To get location.search
-    const [loading, setloading] = useState(false)
-    const [listing, setlisting] = useState([])
-    const [total,settotal] = useState(null)
-    const [searcherror, setsearcherror] = useState(null)
-    const [particularlocation, setparticularlocation] = useState(null)
-    const [currentPage, setCurrentPage] = useState(0) // State to manage current page
+    const navigate = useNavigate();
+    const location = useLocation(); // To get location.search
+    const [loading, setloading] = useState(false);
+    const [listing, setlisting] = useState([]);
+    const [total, settotal] = useState(null);
+    const [searcherror, setsearcherror] = useState(null);
+    const [particularlocation, setparticularlocation] = useState(null);
+    const [currentPage, setCurrentPage] = useState(0); // State to manage current page
 
     const [sidebarData, setsidebarData] = useState({
         searchTerm: '',
         type: 'all',
         sort: "created_at",
         order: "desc"
-    })
+    });
 
     useEffect(() => {
-        const urlParams = new URLSearchParams(location.search)
-        const searchTermFromUrl = urlParams.get("searchTerm")
-        const typeFromUrl = urlParams.get("type")
-        const sortFromUrl = urlParams.get("sort")
-        const orderFromUrl = urlParams.get("order")
-        const pageFromUrl = parseInt(urlParams.get("page")) || 0 // Get page from URL or default to 0
-
-        setCurrentPage(pageFromUrl)
+        const urlParams = new URLSearchParams(location.search);
+        const searchTermFromUrl = urlParams.get("searchTerm");
+        const typeFromUrl = urlParams.get("type");
+        const sortFromUrl = urlParams.get("sort");
+        const orderFromUrl = urlParams.get("order");
+        const pageFromUrl = parseInt(urlParams.get("page")) || 0; // Get page from URL or default to 0
+        
+        setCurrentPage(pageFromUrl);
 
         if (
             searchTermFromUrl ||
@@ -43,90 +43,91 @@ const Search = () => {
                 type: typeFromUrl || 'all',
                 sort: sortFromUrl || 'created_at',
                 order: orderFromUrl || 'desc'
-            })
+            });
         }
 
         const fetchListings = async () => {
-            setloading(true)
+            setloading(true);
             try {
-                const searchQuery = urlParams.toString()
+                const searchQuery = urlParams.toString();
                 //console.log(`/api/v1/listing/get?${searchQuery}&page=${pageFromUrl}`)
-                const res = await fetch(`/api/v1/listing/get?${searchQuery}&page=${pageFromUrl}`)
-                const data = await res.json()
+                const res = await fetch(`/api/v1/listing/get?${searchQuery}&page=${pageFromUrl}`);
+                const data = await res.json();
                 if (data.success === false) {
-                    setsearcherror(data.error)
-                    return
+                    setsearcherror(data.error);
+                    return;
                 }
                 if (data.listings.length > 0) {
-                    const firstAddressParts = data.listings[0].address.toLowerCase().split(/[\/,]/).map(addr => addr.trim())
-                    console.log("First Address Parts:", firstAddressParts)
-                    let check = true
+                    const firstAddressParts = data.listings[0].address.toLowerCase().split(/[\/,]/).map(addr => addr.trim());
+                    console.log("First Address Parts:", firstAddressParts);
+                    let check = true;
 
                     data.listings.forEach(listing => {
-                        const listingAddressParts = listing.address.toLowerCase().split(/[\/,]/).map(addr => addr.trim())
+                        const listingAddressParts = listing.address.toLowerCase().split(/[\/,]/).map(addr => addr.trim());
                         for (let i = 0; i < firstAddressParts.length; i++) {
                             if (listingAddressParts[i] !== firstAddressParts[i]) {
-                                check = false
-                                break
+                                check = false;
+                                break;
                             }
                         }
-                    })
+                    });
 
                     if (check) {
-                        setparticularlocation(firstAddressParts.join(','))
+                        setparticularlocation(firstAddressParts.join(','));
                     } else {
-                        setparticularlocation(null)
+                        setparticularlocation(null);
                     }
                 }
-                settotal(data.totalListingsCount)
-                setlisting(data.listings)
-                setloading(false)
+                settotal(data.totalListingsCount);
+                setlisting(data.listings);
+                setloading(false);
             } catch (error) {
-                setsearcherror(error)
-                setloading(false)
+                setsearcherror(error);
+                setloading(false);
             }
-        }
-        fetchListings()
+        };
+        fetchListings();
         window.scrollTo(0, 0);
-    }, [location.search, currentPage])
+    }, [location.search]);
 
     const handleChange = (e) => {
         if (e.target.id === 'all' || e.target.id === 'hotel' || e.target.id === 'rent' || e.target.id === 'sale') {
-            setsidebarData({ ...sidebarData, type: e.target.id })
+            setsidebarData({ ...sidebarData, type: e.target.id });
         }
         if (e.target.id === 'searchTerm') {
-            setsidebarData({ ...sidebarData, searchTerm: e.target.value })
+            setsidebarData({ ...sidebarData, searchTerm: e.target.value });
         }
         if (e.target.id === 'sort_order') {
-            const sort = e.target.value.split('_')[0] || 'created_at'
-            const order = e.target.value.split('_')[1] || 'desc'
+            const sort = e.target.value.split('_')[0] || 'created_at';
+            const order = e.target.value.split('_')[1] || 'desc';
 
-            setsidebarData({ ...sidebarData, sort, order })
+            setsidebarData({ ...sidebarData, sort, order });
         }
-    }
+        setCurrentPage(0);
+    };
 
     const handlesubmit = (e) => {
-        e.preventDefault()
-        const urlParams = new URLSearchParams()
-        urlParams.set("searchTerm", sidebarData.searchTerm)
-        urlParams.set("type", sidebarData.type)
-        urlParams.set("sort", sidebarData.sort)
-        urlParams.set("order", sidebarData.order)
-        urlParams.set("page", currentPage) // Include currentPage in URL params
-        const searchQuery = urlParams.toString()
-        navigate(`/search?${searchQuery}`)
-    }
+        e.preventDefault();
+        const urlParams = new URLSearchParams();
+        urlParams.set("searchTerm", sidebarData.searchTerm);
+        urlParams.set("type", sidebarData.type);
+        urlParams.set("sort", sidebarData.sort);
+        urlParams.set("order", sidebarData.order);
+        urlParams.set("page", currentPage); // Set page to currentPage
+        const searchQuery = urlParams.toString();
+        navigate(`/search?${searchQuery}`);
+    };
 
     const handlePageChange = (direction) => {
-        const newPage = direction === 'next' ? currentPage + 1 : currentPage - 1
+        const newPage = direction === 'next' ? currentPage + 1 : currentPage - 1;
         if (newPage >= 0) { // Ensure page number is non-negative
-            setCurrentPage(newPage)
-            const urlParams = new URLSearchParams(location.search)
-            urlParams.set("page", newPage)
-            const searchQuery = urlParams.toString()
-            navigate(`/search?${searchQuery}`)
+            setCurrentPage(newPage);
+            const urlParams = new URLSearchParams(location.search);
+            urlParams.set("page", newPage);
+            const searchQuery = urlParams.toString();
+            navigate(`/search?${searchQuery}`);
         }
-    }
+    };
                 
     return (
         <div className='w-screen h-screen font-sub font-semibold tracking-[-1px] flex-col md:flex-row flex relative'>
@@ -210,7 +211,7 @@ const Search = () => {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default Search
+export default Search;
