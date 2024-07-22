@@ -2,6 +2,7 @@ import {createSlice} from '@reduxjs/toolkit'
 
 const initialState = {
     currentUser:null,
+    url: "https://feelhome-server.onrender.com",
     address:null,
     error:null,
     loading:false,

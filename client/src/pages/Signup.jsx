@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import OAuth from '../components/OAuth'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { signinSuccess } from '../redux/user/userSlice'
 
 const Signup = () => {
+    const {url} = useSelector(state=>state.user)
     const dispatch = useDispatch()
     const [formData,setformData] = useState({})
     const [otp,setotp] = useState(null)
@@ -25,7 +26,7 @@ const Signup = () => {
        try {
         e.preventDefault()
         setLoading(true)
-        const res = await fetch('/api/v1/auth/signup',
+        const res = await fetch(`${url}/api/v1/auth/signup`,
             {
                 method: "POST",
                 headers: {
@@ -55,7 +56,7 @@ const Signup = () => {
       try {
        e.preventDefault()
        setLoading(true)
-       const res = await fetch('/api/v1/auth/verifyOTP',
+       const res = await fetch(`${url}/api/v1/auth/verifyOTP`,
            {
                method: "POST",
                headers: {

@@ -27,7 +27,7 @@ const CreateListing = () => {
         parking:false,
         furnished:false
     })
-    const {currentUser} = useSelector(state => state.user)
+    const {currentUser,url} = useSelector(state => state.user)
     const [loading,setloading] = useState(false)
     const [error,seterror] = useState(null)
     const navigate = useNavigate()
@@ -161,7 +161,7 @@ const CreateListing = () => {
             }
             setloading(true)
             seterror(null)
-            const res = await fetch("/api/v1/listing/create",{
+            const res = await fetch(`${url}/api/v1/listing/create`,{
                 method:"POST",
                 headers:{
                     'Content-Type':"application/json"

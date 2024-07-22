@@ -8,7 +8,7 @@ import ListingBox from '../components/ListingBox'
 
 const ListingPage = () => {
     const [city,setcity] = useState('')
-    const {currentUser} = useSelector(state=>state.user)
+    const {currentUser,url} = useSelector(state=>state.user)
     const [Landlord, setLandLord] = useState(null);
     const [listing, setListing] = useState({})
     const [locationListing, setlocationListing] = useState({})
@@ -25,7 +25,7 @@ const ListingPage = () => {
         const fetchListing = async () => {
             setLoading(true)
             try {
-                const res = await fetch(`/api/v1/listing/get/${params.listingID}`)
+                const res = await fetch(`${url}/api/v1/listing/get/${params.listingID}`)
                 const data = await res.json()
                 if (data.success === false) {
                     setError(data.message)

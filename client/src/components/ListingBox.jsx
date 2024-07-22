@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 
 
 const ListingBox = ({ data,id }) => {
 
   const [userlisting, setUserListing] = useState([]);
-
+  const {url} = useSelector(state=>state.user)
   const params = useParams();
 
   const getDesc = (desc) => {
@@ -20,7 +21,7 @@ const ListingBox = ({ data,id }) => {
       if(id){
         const handleShowListing = async() => {
             try {
-              const res = await fetch(`/api/v1/user/listings/${id}`)
+              const res = await fetch(`${url}/api/v1/user/listings/${id}`)
               const data = await res.json()
               if(data.success === false){
                 return

@@ -3,8 +3,10 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import ListingItem from './ListingItem'
 import ListingBox from '../components/ListingBox'
 import MapComponent from './MapComponent'
+import { useSelector } from 'react-redux'
 
 const Search = () => {
+    const {url} = useSelector(state=>state.user)
     const navigate = useNavigate()
     const location = useLocation() // To get location.search
     const [loading, setloading] = useState(false)
@@ -49,8 +51,8 @@ const Search = () => {
             setloading(true)
             try {
                 const searchQuery = urlParams.toString()
-                console.log(`/api/v1/listing/get?${searchQuery}&page=${pageFromUrl}`)
-                const res = await fetch(`/api/v1/listing/get?${searchQuery}&page=${pageFromUrl}`)
+                //console.log(`${url}/api/v1/listing/get?${searchQuery}&page=${pageFromUrl}`)
+                const res = await fetch(`${url}/api/v1/listing/get?${searchQuery}&page=${pageFromUrl}`)
                 const data = await res.json()
                 if (data.success === false) {
                     setsearcherror(data.error)

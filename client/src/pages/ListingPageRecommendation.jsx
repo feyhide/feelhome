@@ -7,12 +7,12 @@ const ListingPageRecommendation = ({Landlord,listing}) => {
 
     const [userlisting,setuserlisting] = useState({})
 
-    const {currentUser} = useSelector(state=>state.user)
+    const {currentUser,url} = useSelector(state=>state.user)
 
 
     const handleShowListing = async() => {
         try {
-          const res = await fetch(`/api/v1/user/listings/${listing.userRef}`)
+          const res = await fetch(`${url}/api/v1/user/listings/${listing.userRef}`)
           const data = await res.json()
           if(data.success === false){
             return

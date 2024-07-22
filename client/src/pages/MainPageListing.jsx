@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 const MainPageListing = () => {
   const container = useRef(null)
   const boxes = useRef([])
+  const {url} = useSelector(state=>state.user)
   const {address} = useSelector(state=>state.user)
   const [hotelpreview, sethotelpreview] = useState({})
   const [salepreview, setsalepreview] = useState({})
@@ -18,7 +19,7 @@ const MainPageListing = () => {
   useEffect(() => {
     const fetchHotelListing = async () => {
       try {
-        const res = await fetch(`/api/v1/listing/get?type=hotel&limit=4`)
+        const res = await fetch(`${url}/api/v1/listing/get?type=hotel&limit=4`)
         const data = await res.json()
         if (data.success === false) {
           console.log(data.message)
@@ -33,7 +34,7 @@ const MainPageListing = () => {
     fetchHotelListing()
     const fetchRentListing = async () => {
       try {
-        const res = await fetch(`/api/v1/listing/get?type=rent&limit=4`)
+        const res = await fetch(`${url}/api/v1/listing/get?type=rent&limit=4`)
         const data = await res.json()
         if (data.success === false) {
           console.log(data.message)
@@ -48,7 +49,7 @@ const MainPageListing = () => {
     fetchRentListing()
     const fetchSaleListing = async () => {
       try {
-        const res = await fetch(`/api/v1/listing/get?type=sale&limit=4`)
+        const res = await fetch(`${url}/api/v1/listing/get?type=sale&limit=4`)
         const data = await res.json()
         if (data.success === false) {
           console.log(data.message)
@@ -67,7 +68,7 @@ const MainPageListing = () => {
     const fetchLocationListing = async () => {
       //console.log("hello")
       try {
-        const res = await fetch(`/api/v1/listing/get?searchTerm=${address.city}&limit=4&sort=created_at&order=desc`)
+        const res = await fetch(`${url}/api/v1/listing/get?searchTerm=${address.city}&limit=4&sort=created_at&order=desc`)
         const data = await res.json()
         if (data.success === false) {
           console.log(data.message)
