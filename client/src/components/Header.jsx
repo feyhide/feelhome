@@ -30,26 +30,20 @@ const Header = () => {
   useEffect(()=>{
     setsignIn(false)
     setsignUp(false)
-  },[location.pathname])
+  },[location.pathname,currentUser])
 
   console.log(signIn,signUp)
   return (
     <>
-      <div className='flex w-full h-[80px] fixed top-0 z-50 bg-white justify-between items-center py-3 mx-auto px-40'>
-        <div className='relative w-[200px] h-full'>
+      <div className='flex w-full h-[80px] fixed top-0 z-50 bg-white justify-evenly md:justify-between items-center py-3 md:mx-auto md:px-40'>
+        <Link to={'/'} className='relative w-[200px] h-full'>
           <img className='w-full h-full object-contain' src='/feelhome.png'/>
-        </div>
+        </Link>
         {/* <form onSubmit={handleSubmit} className='bg-slate-100 p-3 flex items-center rounded-lg'>
           <input value={searchTerm} onChange={(e)=>setsearchTerm(e.target.value)} className='bg-transparent focus:outline-none w-24 sm:w-64' type='text' placeholder='search.....'/>
           <button type='submit'>Submit</button>
           </form> */}
         <ul className='flex gap-4 font-main items-center'>
-          <Link to='/'>
-            <li className='hidden sm:inline text-slate-500 tracking-tight text-[20px] hover:text-black hover:text-[22px] hover:underline transition-all ease'>home</li>
-          </Link>
-          <Link to='/about'>
-              <li className='tracking-tight text-slate-500 text-[20px] hover:underline hover:text-black hover:text-[22px] transition-all ease'>about</li>
-            </Link>
           {!currentUser ? (
             <Link onClick={()=>{setsignIn(!signIn),setsignUp(false)}}>
               <li className='hidden tracking-tight sm:inline text-slate-500 text-[20px] transition-all ease hover:text-[22px] hover:underline hover:text-black'>sign in</li>

@@ -32,13 +32,13 @@ const ListingPageRecommendation = ({Landlord,listing}) => {
   return (
     Landlord && (
         <>
-            <div className='w-full font-semibold p-20 gap-3 font-sub flex flex-col justify-center items-center '>
+            <div className='w-full font-semibold md:p-20 gap-3 font-sub flex flex-col justify-center items-center '>
                 {listing.userRef === currentUser._id ? (
-                    <h1 className='text-4xl tracking-[-2px]'>More Listing Of Yours</h1>
+                    <h1 className='w-full text-center text-2xl md:text-4xl tracking-[-2px]'>More Listing Of Yours</h1>
                 ) : (
-                    <h1 className='text-4xl tracking-[-2px]'>More Listing By {Landlord.username}</h1>
+                    <h1 className='text-2xl w-full text-center md:text-4xl tracking-[-2px]'>More Listing By {Landlord.username}</h1>
                 )}
-                <div className='w-full tracking-[0px] flex gap-4 flex-wrap justify-center items-center'>
+                <div className='w-full tracking-[0px] flex gap-2 flex-wrap justify-center items-center'>
                     <ListingBox id={listing.userRef}/>
                 </div>
             </div>

@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Icon, divIcon } from 'leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
-import axios from 'axios';
+import mapboxgl from '@mapbox/mapbox-sdk/services/geocoding';
 
 const MapComponent = ({ location, listings }) => {
     const mapRef = useRef();
@@ -33,33 +33,41 @@ const MapComponent = ({ location, listings }) => {
         }
     };
 
-    useEffect(() => {
-        const fetchLocationData = async () => {
-            setLoading(true);
-            try {
-                if (location) {
-                    console.log("location: ", location);
-                    setRadius(3000);
-                    const response = await axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${location}&limit=1`);
-                    if (response.data && response.data.length > 0) {
-                        const { lat, lon } = response.data[0];
-                        const newGeoCode = [parseFloat(lat), parseFloat(lon)];
-                        setGeoCode(newGeoCode);
+    const fetchLocationData = async (location) => {
+        const mapboxClient = mapboxgl({ accessToken: 'pk.eyJ1IjoiZmV5aGlkZSIsImEiOiJjbHl1YzcwcnMxMWF3Mmpwd2pyeW1lY3dvIn0.XyayFSAAjpmd9-yzrOhBgg' });
+        try {
+            const response = await mapboxClient.forwardGeocode({
+                query: location,
+                limit: 1
+            }).send();
+            
+            if (response && response.body && response.body.features.length > 0) {
+                const { center } = response.body.features[0];
+                return { lat: center[1], lon: center[0] };
+            }
+        } catch (error) {
+            console.error('Error fetching location:', error);
+        }
+        return null;
+    };
 
-                        if (mapRef.current) {
-                            mapRef.current.setView(newGeoCode, 11);
-                        }
-                    } else {
-                        console.log(response.data.message);
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            if (location) {
+                const locationData = await fetchLocationData(location);
+                if (locationData) {
+                    setGeoCode([locationData.lat, locationData.lon]);
+                    setRadius(3000);
+                    if (mapRef.current) {
+                        mapRef.current.setView([locationData.lat, locationData.lon], 11);
                     }
                 }
-            } catch (error) {
-                console.error('Error fetching location:', error);
             }
             setLoading(false);
         };
 
-        fetchLocationData();
+        fetchData();
     }, [location]);
 
     useEffect(() => {
@@ -67,58 +75,54 @@ const MapComponent = ({ location, listings }) => {
             setLoading(true);
             if (listings && listings.length > 0) {
                 setRadius(0);
+                const newMarkers = [];
                 for (const listing of listings) {
-                    try {
-                        const response = await axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${listing.address}&limit=1`);
-                        if (response.data && response.data.length > 0) {
-                            const { lat, lon } = response.data[0];
-                            const newMarker = {
-                                geoCode: [parseFloat(lat), parseFloat(lon)],
-                                popUp: listing.name
-                            };
-                            setMarkers(prevMarkers => [...prevMarkers, newMarker]);
-
-                            if (mapRef.current) {
-                                boundsRef.current.extend([lat, lon]);
-                                mapRef.current.fitBounds(boundsRef.current.pad(0.5));
-                            }
-                        }
-                        setLoading(false);
-                    } catch (error) {
-                        setLoading(false);
-                        console.error(`Error fetching coordinates for ${listing.address}:`, error);
+                    const locationData = await fetchLocationData(listing.address);
+                    if (locationData) {
+                        newMarkers.push({
+                            geoCode: [locationData.lat, locationData.lon],
+                            popUp: listing.name
+                        });
+                        boundsRef.current.extend([locationData.lat, locationData.lon]);
                     }
                 }
+                setMarkers(newMarkers);
+                if (mapRef.current) {
+                    mapRef.current.fitBounds(boundsRef.current.pad(0.5));
+                }
             }
+            setLoading(false);
         };
 
         fetchListingsData();
     }, [listings]);
 
     return (
-        !loading ? (<div className='w-full h-full'>
-            <MapContainer center={geoCode} zoom={getZoomLevel()} className='w-full h-full' ref={mapRef}>
-                <TileLayer
-                    url="https://tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token=9lw3SXFhb6I62TLQOh3qkT2m8orxamEsr90FCa0LPnXxfJYCH9FQpXBZ7S64fTJA"
-                />
-                <Circle center={geoCode} pathOptions={{ color: 'white', fillColor: 'white' }} radius={10000} />
-                <MarkerClusterGroup
-                    chunkedLoading
-                    iconCreateFunction={createCustomClusterIcon}
-                    className=""
-                >
-                    {markers.map((marker, index) => (
-                        <Marker key={index} position={marker.geoCode} icon={customIcon}>
-                            <Popup>
-                                <h1>{marker.popUp}</h1>
-                            </Popup>
-                        </Marker>
-                    ))}
-                </MarkerClusterGroup>
-            </MapContainer>
-        </div>):(
+        !loading ? (
+            <div className='w-full h-full'>
+                <MapContainer center={geoCode} zoom={getZoomLevel()} className='w-full h-full' ref={mapRef}>
+                    <TileLayer
+                        url="https://tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token=9lw3SXFhb6I62TLQOh3qkT2m8orxamEsr90FCa0LPnXxfJYCH9FQpXBZ7S64fTJA"
+                    />
+                    <Circle center={geoCode} pathOptions={{ color: 'white', fillColor: 'white' }} radius={10000} />
+                    <MarkerClusterGroup
+                        chunkedLoading
+                        iconCreateFunction={createCustomClusterIcon}
+                        className=""
+                    >
+                        {markers.map((marker, index) => (
+                            <Marker key={index} position={marker.geoCode} icon={customIcon}>
+                                <Popup>
+                                    <h1>{marker.popUp}</h1>
+                                </Popup>
+                            </Marker>
+                        ))}
+                    </MarkerClusterGroup>
+                </MapContainer>
+            </div>
+        ) : (
             <div className='w-full h-full relative flex items-center justify-center'>
-                <img className='w-full h-full object-cover' src='/maploading.jpeg'/>
+                <img className='w-full h-full object-cover' src='/maploading.jpeg' alt="Loading"/>
                 <div className='flex items-center justify-center absolute top-0 w-full h-full bg-white bg-opacity-70'>
                     <h1 className='font-sub text-3xl tracking-[-2px] font-bold'>Loading Map...</h1>
                 </div>

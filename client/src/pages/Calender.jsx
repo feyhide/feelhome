@@ -8,7 +8,7 @@ const Calendar = ({ bookingDates }) => {
     return (
       <div className="flex justify-between items-center mb-4">
         <button className="px-2 py-1" onClick={prevMonth}>Prev</button>
-        <div className="text-lg font-semibold">{format(currentDate, 'MMMM yyyy')}</div>
+        <div className="text-sm md:text-lg font-semibold">{format(currentDate, 'MMMM yyyy')}</div>
         <button className="px-2 py-1" onClick={nextMonth}>Next</button>
       </div>
     );
@@ -78,7 +78,7 @@ const Calendar = ({ bookingDates }) => {
   };
 
   return (
-    <div className="w-[300px] h-full bg-white flex flex-col p-2 rounded border shadow-lg">
+    <div className="w-[250px] md:w-[300px] text-xs md:text-base md:h-full bg-white flex flex-col p-2 rounded border shadow-lg">
       {renderHeader()}
       {renderDaysOfWeek()}
       {renderCells()}

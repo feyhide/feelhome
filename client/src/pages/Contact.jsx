@@ -50,15 +50,15 @@ const Contact = ({Landlord, listing }) => {
             {Landlord && (
                 <div className='w-full relative h-full flex flex-col rounded-xl overflow-hidden'>
                     {descActive && (
-                        <div className='w-full h-full font-main tracking-[-1px] absolute p-5 top-0 bg-white z-20 overflow-hidden'>
+                        <div className='w-full h-full font-sub tracking-[-1px] absolute p-5 top-0 bg-white z-20 overflow-hidden'>
                             <div className='flex flex-col h-full'>
                                 <div className='relative flex items-center justify-center w-full'>
                                     <div onClick={() => setDescActive(false)} className='w-6 h-6 absolute left-0'>
                                         <img className='w-full h-full object-contain' src='/arrowback.png' alt='Arrow Back' />
                                     </div>
-                                    <p className='font-semibold text-2xl'>Description:</p>
+                                    <p className='font-semibold text-sm md:text-2xl'>Description:</p>
                                 </div>
-                                <div className='flex-1 text-xl flex flex-col overflow-y-auto p-4'>
+                                <div className='flex-1 text-sm md:text-xl flex flex-col overflow-y-auto p-4'>
                                     {/* <div dangerouslySetInnerHTML={{ __html: fulldesc }} /> */}
                                     <div onClick={() => setDescActive(true)} className='flex flex-col gap-2 transition-all ease w-full'>
                                     {fulldesc.map((text,index)=>(
@@ -69,32 +69,32 @@ const Contact = ({Landlord, listing }) => {
                             </div>
                         </div>
                     )}
-                    <div className='font-main gap-2 tracking-[-1px] p-4 w-full h-[60%] flex flex-col'>
+                    <div className='font-sub gap-2 tracking-[-1px] p-4 w-full h-[60%] flex flex-col'>
                         <div>
-                            <p className='w-full text-center pt-3 text-3xl'>Listed By <span className='font-bold'>{Landlord.username}</span></p>
-                            <p className='w-full text-center text-2xl'>For <span className='uppercase font-bold'>{listing.type}</span></p>
+                            <p className='w-full text-center pt-3 text-lg md:text-3xl'>Listed By <span className='font-bold'>{Landlord.username}</span></p>
+                            <p className='w-full text-center text-sm md:text-2xl'>For <span className='uppercase font-bold'>{listing.type}</span></p>
                         </div>
                         <div className='flex flex-col gap-1'>
                             <div className=''>
-                            <p className='font-semibold text-2xl w-full'>Description:</p>
-                                <div onClick={() => setDescActive(true)} className='hover:text-slate-500 flex flex-col transition-all ease w-full'>
+                            <p className='font-semibold text-sm md:text-2xl w-full'>Description:</p>
+                                <div onClick={() => setDescActive(true)} className='hover:text-slate-500 text-sm md:text-base flex flex-col transition-all ease w-full'>
                                     {shortdesc.slice(0, 3).map((text, index) => (
                                         <p className='line-clamp-1' key={index}>{text}</p>
                                     ))}
                                 </div>
                             </div>
                             <div>
-                                <p className='font-semibold text-2xl w-full'>Address: </p>
-                                <p className='w-full'>{listing.address}</p>
+                                <p className='font-semibold text-sm md:text-2xl w-full'>Address: </p>
+                                <p className='w-full text-sm md:text-base'>{listing.address}</p>
                             </div>
                         </div>
-                        <div className='w-full gap-4 flex'>
+                        <div className='w-full gap-4 flex flex-wrap'>
                             {listing.parking && (
                                 <div className='flex gap-1 items-center'>
                                     <div className='w-5 h-full flex items-center relative'>
                                         <img className='w-full h-full object-contain' src='/parkingicon.png' alt='Parking Icon' />
                                     </div>
-                                    <p className=''>Parking</p>
+                                    <p className='text-sm md:text-base'>Parking</p>
                                 </div>
                             )}
                             {listing.furnished && (
@@ -102,31 +102,31 @@ const Contact = ({Landlord, listing }) => {
                                     <div className='w-5 h-full flex items-center relative'>
                                         <img className='w-full h-full object-contain' src='/furnishedicon.png' alt='Furnished Icon' />
                                     </div>
-                                    <p className=''>Furnished</p>
+                                    <p className='text-sm md:text-base'>Furnished</p>
                                 </div>
                             )}
                             <div className='flex gap-1 items-center'>
                                 <div className='w-5 h-full flex items-center relative'>
                                     <img className='w-full h-full object-contain' src='/bedroomicon.png' alt='Bedroom Icon' />
                                 </div>
-                                <p className=''>{listing.bedrooms} beds</p>
+                                <p className='text-sm md:text-base'>{listing.bedrooms} beds</p>
                             </div>
                             <div className='flex gap-1 items-center'>
                                 <div className='w-5 h-full flex items-center relative'>
                                     <img className='w-full h-full object-contain' src='/bathroomicon.png' alt='Bathroom Icon' />
                                 </div>
-                                <p className=''>{listing.bathrooms} bathrooms</p>
+                                <p className='text-sm md:text-base'>{listing.bathrooms} bathrooms</p>
                             </div>
                         </div>
                         <div className='w-full flex gap-2 flex-col'>
-                            <div className='flex gap-1'>
+                            <div className='flex text-sm md:text-base gap-1'>
                                 <p>Posted on</p>
                                 <p>{posttime}</p>
                             </div>
                         </div>
                         {listing.type === 'hotel' && (
                             <div className='relative w-full'>
-                                <h1 className='h-[20px]' onClick={()=>setviewBooking(!viewBooking)}>{viewBooking ? "Close Bookings" : 'View Bookings'}</h1>
+                                <h1 className='h-[20px] text-sm md:text-base' onClick={()=>setviewBooking(!viewBooking)}>{viewBooking ? "Close Bookings" : 'View Bookings'}</h1>
                                 {viewBooking && (
                                     <div className='mt-[20px] absolute z-10 w-full top-0'>
                                         <Calendar bookingDates={listing.bookingDates}/>

@@ -63,8 +63,8 @@ export const getListing = async(req,res,next)=>{
 
 export const getAll = async (req, res, next) => {
     try {
-        const limit = parseInt(req.query.limit) || 10000;
-        const startIndex = parseInt(req.query.startIndex) || 0;
+        const limit = parseInt(req.query.limit) || 9;
+        const page = parseInt(req.query.page) || 0;
 
         let type = req.query.type;
         if (type === undefined || type === 'all') {
@@ -75,6 +75,14 @@ export const getAll = async (req, res, next) => {
 
         const sort = req.query.sort || 'createdAt';
         const order = req.query.order || 'desc';
+        
+        const totalListingsCount = await listing.countDocuments({
+            $or: [
+                { name: { $regex: searchTerm, $options: 'i' } },
+                { address: { $regex: searchTerm, $options: 'i' } }
+            ],
+            type
+        });
 
         const listings = await listing.find({
             $or: [
@@ -84,9 +92,9 @@ export const getAll = async (req, res, next) => {
             type
         }).sort({ [sort]: order })
           .limit(limit)
-          .skip(startIndex);
+          .skip(page*limit);
 
-        return res.status(200).json(listings);
+        return res.status(200).json({totalListingsCount,listings});
     } catch (error) {
         next(error);
     }

@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.1",
+    "@mapbox/mapbox-sdk": "^0.16.0",
     "@tailwindcss/line-clamp": "^0.4.4",
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
