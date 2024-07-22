@@ -28,7 +28,7 @@ const MainPageListing = () => {
         sethotelpreview(data.listings)
         console.log("hotel listing", data.listings)
       } catch (error) {
-        console.log(error)
+        console.log("ERROR",error)
       }
     }
     fetchHotelListing()
@@ -43,7 +43,7 @@ const MainPageListing = () => {
         setrentpreview(data.listings)
         console.log("rent listing", data.listings)
       } catch (error) {
-        console.log(error)
+        console.log("ERROR",error)
       }
     }
     fetchRentListing()
@@ -58,7 +58,7 @@ const MainPageListing = () => {
         setsalepreview(data.listings)
         console.log("sale listing", data.listings)
       } catch (error) {
-        console.log(error)
+        console.log("ERROR",error)
       }
     }
     fetchSaleListing()
@@ -77,7 +77,7 @@ const MainPageListing = () => {
         setlocationpreview(data.listings)
         console.log("location listing", data.listings)
       } catch (error) {
-        console.log(error)
+        console.log("ERROR",error)
       }
     }
     fetchLocationListing()
