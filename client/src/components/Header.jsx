@@ -46,7 +46,7 @@ const Header = () => {
         <ul className='flex gap-4 font-sub items-center'>
           {!currentUser ? (
             <Link onClick={()=>{setsignIn(!signIn),setsignUp(false)}}>
-              <li className='hidden tracking-[-1px] sm:inline text-slate-500 text-[20px] transition-all ease hover:text-[22px] hover:underline hover:text-black'>sign in</li>
+              <li className='tracking-[-1px] sm:inline text-slate-500 text-lg transition-all ease hover:text-[22px] hover:underline hover:text-black'>sign in</li>
             </Link>
           ) : (
             <Link to={`/profile/${currentUser._id}`}>
